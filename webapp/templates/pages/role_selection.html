@@ -1,0 +1,82 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .navbar {
+    overflow: hidden;
+    background-color: #092635;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .navbar a {
+    float: left;
+    display: block;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+  }
+
+  .navbar a:hover {
+    color: rgb(5, 146, 7);
+  }
+
+  .role-selection-container {
+    display: flex;
+    flex-direction: column; /* Align cards vertically */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .role-card {
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 200px;
+  }
+
+  .role-card a {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .role-card a:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<div class="bg-img">
+  <div class="navbar">
+    <a href="{% url 'landing_page' %}">OMSUFB</a>
+  </div>
+
+  <div class="role-selection-container">
+    <div class="role-card">
+      <h2>Admin</h2>
+      <a href="{% url 'adminlogin' %}">Sign In as Admin</a>
+    </div>
+    <div class="role-card">
+      <h2>Instructor</h2>
+      <a href="{% url 'user-login' %}">Sign In as Instructor</a>
+    </div>
+    <div class="role-card">
+      <h2>Guest</h2>
+      <a href="{% url 'student' %}">Sign In as Guest</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

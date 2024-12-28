@@ -1,0 +1,92 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+{% block content %}
+{% include 'pages/logout.html' %}
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/comlab.css' %}">
+
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+    </div>
+    <br><br><br><br>
+    <a href="{% url 'Apost' %}" {% if request.path == '/Apost/' %}class="active"{% endif %}>News</a>
+    <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+    <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+    <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+    <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+    <a href="{% url 'Acomlab' %}" {% if request.resolver_match.url_name == 'Acomlab' %}class="active"{% endif %}>Comlab</a>
+    <a href="#" id="logoutButton">Log out</a>
+</div>
+
+<body>
+    <div class="card-container">
+        <!-- Display each Comlab card and corresponding modal -->
+        {% for cl in cl %}
+        <div class="cards">
+            <!-- Trigger the modal for this specific card -->
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal{{ cl.id }}">
+                <img src="{% if cl.cards %}{{ cl.cards.url }}{% else %}{% static 'image/comlab.jpg' %}{% endif %}" alt="Card Image">
+            </a>
+            <h6>{{ cl.comlab }}</h6>
+        </div>
+
+        <!-- Modal for each card -->
+        <div class="modal fade" id="modal{{ cl.id }}" tabindex="-1" aria-labelledby="modalLabel{{ cl.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content custom-modal-content">
+                    <div>
+                        <img src="{% if cl.cards %}{{ cl.cards.url }}{% else %}{% static 'image/comlab.jpg' %}{% endif %}" class="img-fluid" alt="Card Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+            <!-- Add Button Modal Trigger -->
+<button type="button" data-bs-toggle="modal" data-bs-target="#addModal"> + Equipment</button>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Equipment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- The form goes here -->
+                <form method="POST" action="{% url 'Acomlab' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}  <!-- Render the form fields -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Table to display equipment -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Equipment</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for eq_item in eq %}
+        <tr>
+            <td>{{ eq_item.name }}</td>
+            <td>{{ eq_item.date }}</td>  <!-- Show date and time -->
+            <td>{{ eq_item.equipment }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        </div>
+    </div>
+</body>
+{% endblock %}

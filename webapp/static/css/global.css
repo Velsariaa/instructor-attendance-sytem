@@ -1,0 +1,57 @@
+/* Global CSS - global.css */
+
+/* Custom Logout Modal Styling */
+.custom-modal-content {
+    background-color: #f8f9fa!important; /* Light gray background */
+    border-radius: 10px!important;
+    border: 1px solid #dee2e6!important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)!important;
+}
+
+.custom-modal-header {
+    background-color: #343a40!important; /* Dark background for the header */
+    color: white!important;
+    border-bottom: 1px solid #dee2e6!important;
+    padding: 15px!important;
+    border-top-left-radius: 10px!important;
+    border-top-right-radius: 10px!important;
+}
+
+.custom-modal-header .custom-btn-close {
+    color: white!important;
+}
+
+.custom-modal-body {
+    padding: 20px!important;
+    font-size: 16px!important;
+}
+
+.custom-modal-footer {
+    display: flex!important;
+    justify-content: flex-end!important;
+    padding: 15px!important;
+    border-top: 1px solid #dee2e6!important;
+}
+
+.custom-btn-no {
+    background-color: #6c757d!important; /* Gray button */
+    border: none!important;
+    padding: 10px 20px!important;
+    margin-right: 10px!important;
+    border-radius: 5px!important;
+}
+
+.custom-btn-no:hover {
+    background-color: #5a6268!important;
+}
+
+.custom-btn-yes {
+    background-color: #dc3545!important; /* Red button */
+    border: none!important;
+    padding: 10px 20px!important;
+    border-radius: 5px!important;
+}
+
+.custom-btn-yes:hover {
+    background-color: #c82333!important;
+}

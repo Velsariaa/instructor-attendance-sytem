@@ -1,0 +1,171 @@
+<html>
+<body>
+<style>
+  /* Center the entire page */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Create a container for the form */
+  .container {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #000;
+  }
+
+  /* Table styles */
+  table, td, tr, th {
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Arial;
+    font-size: 15px;
+    width: 50%; /* Set the table width to 50% */
+    margin: 0 auto; /* Center the table horizontally */
+  }
+
+  /* Define padding and font sizes for the paragraphs */
+  p {
+    text-align: center;  /* Center all paragraphs */
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.civil_service_title {
+    text-align: center;  /* Center the title */
+    font-family: Arial;
+    font-size: 10px;
+  }
+
+  p.civil_service_title2 {
+    padding-left: 10px;
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.name {
+    padding-left: 170px;
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.dtr {
+    padding-left: 140px;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  p.circles {
+    padding-left: 180px;
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.line1 {
+    padding-left: 40px;
+    font-family: Arial;
+    font-size: 16px;
+  }
+
+  div {
+    padding-left: 230px;
+  }
+</style>
+
+<div class="container">
+  <CAPTION><EM>
+    <p class="civil_service_title">Civil Service Form No. 48</p>
+    <p class="dtr">DAILY TIME RECORD</p>
+    <p class="circles">-----o0o-----</p>
+    <p class="line1"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;<u> {{Ls.first_name}}, {{Ls.last_name}}</u></p>
+    <p class="name"> (Name)</p>
+    <p class="civil_service_title2"> For the month of______________________________________<br>    
+      Official hours for arrival <br>and departure
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      Regular days________________<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      Saturdays___________________ </p>
+  </EM></CAPTION>
+
+  <TABLE border="1">
+    <tr>
+      <th rowspan="2">Day</th>
+      <th colspan="2">A.M.</th>
+      <th colspan="2">P.M.</th>
+      <th colspan="2">Undertime</th>
+    </tr>
+    <tr>
+      <th>Arrival</th>
+      <th>Departure</th>
+      <th>Arrival</th>
+      <th>Departure</th>
+      <th>Hours</th>
+      <th>Minutes</th>
+    </tr>
+
+    <!-- Rows for each day (1-31) -->
+    <tr><th>1</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>2</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>3</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>4</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>5</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>6</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>7</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>8</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>9</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>10</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>11</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>12</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>13</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>14</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>15</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>16</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>17</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>18</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>19</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>20</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>21</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>22</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>23</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>24</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>25</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>26</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>27</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>28</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>29</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>30</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>31</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+
+    <tr><th colspan="5"><div>Total</div></th><td><td></td></tr>
+  </TABLE>
+
+  <p>I certify on my honor that the above is a true and correct report of the <br>
+  hours of work performed, record of which was made daily at the time <br>
+  of arrival and departure from office.</p><br>
+  ___________________________________________<br>
+
+  <p> VERIFIED as to the prescribed office hours:</p><br>
+  ___________________________________________<br>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  In Charge </p>
+</div>
+
+</body>
+</html>

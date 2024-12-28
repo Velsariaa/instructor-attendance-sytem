@@ -1,0 +1,131 @@
+{% extends 'pages/index.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+
+body {
+    background-color: #e4f6de;
+  }
+  .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      background:#508D4E;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding-top: 20px;
+  }
+  
+  .sidebar a {
+      display: block;
+      color: white;
+      padding: 16px;
+      text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+      background-color: #e4f6de;
+      color: rgb(13, 12, 12);
+  }
+  
+  .sidebar a.active {
+      background-color: #dff8d7;
+      color: #000000;
+  }
+  
+  .logo h5 {
+      margin-left: 60px;
+      color: #f2f2f2;
+      margin-top: -35px;
+  }
+
+table {
+        width: 50%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-left: 300px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+.btn a
+{
+    text-decoration: none;
+    margin-left: 250px;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-top: 10px;
+    color: white;
+    background:#508D4E;
+    border-radius: 8px;
+    padding-bottom:10px ;
+}
+
+a{
+    border: none;
+}
+button.btn
+{
+    margin-top: -20px;
+}
+</style>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+      <img src="{% static 'image/logoams.png' %}"  height="50px" width="50px" alt="CVSU logo">
+      <h5>OMSUFB</h5>
+  </div>
+  <br>
+  <br>
+<a href="{% url 'Apost' %}" {% if request.path == '/Apost/' %}class="active"{% endif %}>News</a>
+<a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+<a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+<a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+<a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+<a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>
+<a href="{% url 'AdminStatus' %}" {% if request.resolver_match.url_name == 'AdminStatus' %}class="active"{% endif %}>Status</a>
+<a href="{% url 'Logout' %}" {% if request.path == '/Logout/' %}class="active"{% endif %}>Log out</a>
+
+</div>
+<br><br><br>
+<button class="btn"><a href="{% url 'Ins-Available' %}">add</a></button>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+ 
+    {% for av in av %}
+    <tr>
+        <td>{{ av.name }}</td>
+        <td>{{ av.status }}</td>
+        <td>
+            <a href="{% url 'availability_edit' pk=av.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

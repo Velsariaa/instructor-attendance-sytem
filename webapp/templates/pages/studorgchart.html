@@ -1,0 +1,225 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+{% block content %}
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body
+    {
+        height: 100vh;
+        display: grid;
+        align-items: center;
+        background: #f5f5f5;
+ 
+        width: 70%;
+        margin-left: 200px;
+    }
+
+    .tree
+    {
+        width: 100%;
+        height: auto;
+        text-align:center;
+    }
+
+    .tree ul
+    {
+        padding-top: 20px;
+        position: relative;
+        transform: .5s;
+    }
+
+    .tree li
+    {
+        display: inline-table;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 10px;
+        transition: .5s;
+    }
+
+    .tree li:before, .tree li:after 
+    {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 1px solid #ccc;
+        width: 51%;
+        height: 10px;
+    }
+
+    .tree li:after 
+    {
+        right: auto;
+        left: 50%;
+        border-left: 1px solid #ccc;
+    }
+
+    .tree li:only-child:after, .tree li :only-child:before
+    {
+        display: none;
+    } 
+    
+    .tree li:only-child
+    {
+        padding-top: 0;
+    }
+
+    .tree li:first-child:before,  .tree li:last-child:after
+    {
+        border: 0 none;
+    }
+
+    .tree li:last-child:before
+    {
+       border-right: 1px solid #ccc;
+       border-radius: 0px 5px 0px 0px; 
+    }
+
+    .tree li:first-child:after
+    {
+       border-radius: 5px 0px 0px 0px; 
+    }
+
+    .tree ul ul:before
+    {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: 1px solid #ccc;
+        width: 0;
+        height: 20px;
+    }
+
+    .tree a
+    {
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: inline-grid;
+        border-radius: 5px;
+        transition: 5px;
+    }
+
+    .tree a img
+    {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 10px !important;
+        border-radius: 100px;
+        margin: auto;
+    }
+
+    .tree a span
+    {
+        border:1px solid #ccc;
+        border-radius: 5px;
+        color: #666;
+        padding: 8px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+    }
+
+    /* hover section */
+
+    .tree li a:hover, .tree li a:hover img, .tree li a:hover span, .tree li a:hover+ul li a
+    {
+        background: #c8e4f8;
+        color: #000;
+        border: 1px solid #94a0b4;
+        box-shadow: 0px 0px 8px -5px #5f5f5f;
+    }
+
+    .tree li a:hover+ul li:after, .tree li a:hover+ul li:before, .tree li a:hover+ul li:before, .tree li a:hover+ul li:before
+    {
+        border-color: #94a0b4;
+
+    }
+
+    /* Custom Dropdown Styles */
+.dropdown-menu {
+    color: black; /* Font color */
+    background-color: #4CAF50; /* Background color */
+}
+
+.dropdown-menu a:hover {
+    background-color: #8BC34A; /* Hover background color */
+}
+
+.dropdown button
+{
+    background-color: #316cff;
+    margin-left: 15px;
+    padding-right:45px;
+}
+
+.dropdown button:hover
+{
+    background-color: #002b97;
+}
+</style>
+<!--SIDEBAR-->
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>CvSU Bacoor</h5>
+    </div>
+    <br><br>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'adminlogin'%}">Admin</a></li>
+            <li><a class="dropdown-item" href="{% url 'login'%}">Instructor</a></li>
+            <li><a class="dropdown-item" href="{% url 'student'%}">Student</a></li>
+        </ul>
+    </div>
+
+    <a href="{% url 'student' %}" {% if request.resolver_match.url_name == '/student/' %}class="active"{% endif %}>News</a>
+    <a href="{% url 'studorg' %}" {% if request.path == '/studorg/' %}class="active"{% endif %}>Organizational Chart</a>
+    
+    
+
+
+</div>
+<body>
+    <div class="tree">
+        <ul>
+            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Chairperson, DCS </span></a>
+                <ul>
+                    <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Program Chair, IT </span></a>
+                        <ul>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                    
+                        </ul>
+                    </li>
+                    <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Program Chair, CS </span></a>
+                        <ul>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                            <li><a href=""><img src="{% static 'image/usericon.png'%}" alt=""><span>Instructors </span></a></li>
+                        </ul></li>
+                    
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+{% endblock %}

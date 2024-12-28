@@ -1,0 +1,38 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'pages/logout.html' %}
+<link rel="stylesheet" href="{% static 'css/schedule.css' %}">
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<div class="sidebar">
+  <div class="logo">
+    <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+    <h5>OMSUFB</h5>
+  </div>
+  <br>
+  <br><br><br>
+<a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+<a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+<a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+<a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+<a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+<a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>  
+<a href="#" id="logoutButton">Log out</a> <!-- Updated to trigger modal instead of redirect -->
+</div>
+
+<div class="card-container">
+  {% for ls in Ls %}
+    <div class="card">
+      {% if ls.profile %}
+        <img class="card-img" src="{{ ls.profile.url }}" alt="Profile Picture">
+      {% else %}
+        <img class="card-img" src="{% static 'path/to/default/profile/image.jpg' %}" alt="Default Profile Picture">
+      {% endif %}
+      <div class="card-info">
+        <h5 class="card-name">{{ ls.first_name }}</h5>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

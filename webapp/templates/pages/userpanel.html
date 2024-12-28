@@ -1,0 +1,327 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+.sidebar {
+    width: 200px;
+}
+
+@media (max-width: 360px) {
+    /* CSS rules for screens up to 360px */
+    .sidebar {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 100px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #0f4f03;
+        z-index: 1000;
+    }
+
+    .sidebar .logo,
+    .sidebar .dropdown,
+    .sidebar a {
+        display: inline-block;
+        
+    }
+
+    .sidebar .logo h5 {
+        margin-top: -30px;
+        width: 5px;
+        margin-left: 5px;
+        font-family: "Mitr", sans-serif;
+        font-weight: 600;
+        font-style: normal;
+    }
+    .logo img{
+        display: none;
+    }
+
+    .sidebar a {
+        padding: 10 10px;
+        text-align: center;
+        margin-top: 18px;
+    }
+
+    .sidebar a i {
+        margin-right: 0;
+        margin-left: 1px;
+    }
+
+    .sidebar a span {
+        display: none;
+    }
+
+    .box {
+        margin-top: 100px;
+        font-size: 10px;
+        margin-right: 0;
+        background-color: #f2efef;
+        width: 100%;
+        overflow-y: auto; /* Make the box scrollable */
+        max-height: calc(100vh - 60px); /* Set a maximum height for the box */
+        margin-left: 0px;
+    }
+
+    .box a {
+        color: black;
+        padding-bottom: 0;
+    }
+
+    .box a:hover {
+        background-color: #ebe5e5;
+    }
+
+    .cons {
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        margin-bottom: 5px;
+        border-radius: 8px;
+        padding: 10px;
+        margin-left: -30px;
+    }
+
+    .cons span {
+        font-size: 8px;
+        color: #000000;
+        margin-left: 20px;
+    }
+
+    strong{
+        text-decoration: none;
+    }
+
+    .pt .profile-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pt {
+        margin-bottom: 30px;
+        margin-left: 0px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .pt img {
+        height: 30px;
+        width: 30px;
+        margin-bottom: 5px;
+    }
+
+    .pt input[type="text"] {
+        border-radius: 8px;
+        margin-left: 50px;
+        padding: 30px;
+    }
+
+    .pt button {
+        background-color: rgb(204, 210, 204);
+        border: 1px solid grey;
+        padding: 5px 42px 5px;
+        border-radius: 20px;
+        margin-left: 10px;
+        margin-top: -50px;
+    }
+
+    .pt button:hover {
+        background-color: rgb(234, 241, 234);
+    }
+
+    .pt a {
+        padding: 2px;
+        color: rgb(230, 0, 0);
+    }
+
+    .pt button a:hover {
+        background-color: rgb(227, 236, 227);
+    }
+
+    .dropdown-menu {
+        color: black;
+        background-color: #4CAF50;
+    }
+
+    .dropdown-menu a:hover {
+        background-color: #8BC34A;
+    }
+
+    .dropdown button {
+        display: none;
+    }
+}
+
+@media (min-width: 933px) {
+    /* CSS rules for screens up to 933px */
+    .sidebar {
+        width: 200px;
+    }
+    .dropdown button {
+        display: none;
+    }
+
+    .sidebar a i {
+        margin-right: 5px;
+    }
+
+    .logo{
+        margin-bottom: 95px;
+    }
+    .box {
+        margin-left: 200px;
+        font-size: 17px;
+        margin-right: 500px;
+        margin-top: 0px;
+        background-color: #f2efef;
+        width: 1200px;
+        padding: 50px 220px 50px;
+        overflow-y: auto; /* Make the box scrollable */
+        max-height: 1180px; /* Set a maximum height for the box */
+    }
+
+    .box a {
+        color: black;
+        padding-bottom: 0;
+    }
+
+    .box a:hover {
+        background-color: transparent;
+    }
+
+    .cons {
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        margin-bottom: 5px;
+        border-radius: 8px;
+        margin-left: -28px;
+        padding: 10px;
+        width: auto;
+    }
+
+    .cons span {
+        font-size: 10px;
+        color: #000000;
+        margin-left: 20px;
+    }
+
+    .pt {
+        margin-bottom: 30px;
+        margin-left: 0px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .pt img {
+        height: 50px;
+        width: 50px;
+        margin-bottom: 5px;
+    }
+
+    .pt .profile-container {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* Adjust the space between the profile picture and the button */
+    }
+
+    .pt .profile-container img {
+        margin-bottom: -10px;
+    }
+
+    .pt button {
+        background-color: rgb(204, 210, 204);
+        border: 0.5px solid rgb(179, 175, 175);
+        padding: 5px 199px 5px;
+        border-radius: 20px;
+    }
+
+    .pt button a {
+        padding: 2px;
+        color: black;
+    }
+
+    .dropdown-menu {
+        color: black;
+        background-color: #4CAF50;
+    }
+
+    .dropdown-menu a:hover {
+        background-color: #8BC34A;
+    }
+
+    .dropdown button {
+        background-color: #316cff;
+        margin-left: 15px;
+        padding-right: 45px;
+    }
+
+    .dropdown button:hover {
+        background-color: #002b97;
+    }
+}
+
+    </style>
+</head>
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'adminlogin'%}">Admin</a></li>
+            <li><a class="dropdown-item" href="{% url 'login'%}">Instructor</a></li>
+            <li><a class="dropdown-item" href="{% url 'student'%}">Student</a></li>
+        </ul>
+    </div>
+    <a href="{% url 'home' %}" {% if request.resolver_match.url_name == '/home/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span>News</span> </a>
+    <a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span>Instructor</span></a>
+    <a href="{% url 'UserA' %}" {% if request.path == '/UserA/' %}class="active"{% endif %}><i class="fa-solid fa-clipboard-user"></i> <span>Attendance</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span>Comlab</span></a>
+    <a href="{% url 'udtr' %}" {% if request.path == '/udtr/' %}class="active"{% endif %}><i class="fa-regular fa-address-card"></i> <span>DTR</span></a>
+    <a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+</div>
+
+<div class="box">
+    <div class="pt">
+        <div class="profile-container">
+            {% if request.user.profile.profile_pic %}
+                <img src="{{ request.user.profile.profile_pic.url }}" alt="Profile Picture">
+            {% else %}
+                <!-- Default profile picture -->
+                <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture">
+            {% endif %}
+            <a href="{% url 'createpost' %}"><button>Create Post</button></a>
+        </div>
+        <hr>
+    </div>
+    <ul>
+        {% for post in post %}
+        <div class="cons">
+            <a href="{% url 'details' post.pk %}">
+                <strong>{{ post.title }}</strong>
+            </a>
+            <br> {{ post.author }} <br>
+            <br>
+            {{ post.body }} 
+            
+            <br><br><br>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    background:#508D4E;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding-top: 20px;
+}
+/* 
+.sidebar:hover {
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.5);
+} */
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+
+}
+
+.sidebar a:hover {
+    background-color: #e4f6de;
+    color: rgb(13, 12, 12);
+}
+
+.sidebar a.active {
+    background-color: #dff8d7;
+    color: #000000;
+}
+
+.logo h5 {
+    margin-left: 60px;
+    color: #f2f2f2;
+    margin-top: -35px;
+}
+.post-container {
+    border: 2px solid lightgray;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+.post-container {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #fff;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+small {
+    color: #666;
+}
+hr {
+    margin: 15px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+.post-body {
+    line-height: 1.6;
+    padding: 15px;
+    padding-bottom: 100px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.back-button {
+    display: inline-block;
+    padding: 8px 16px;
+   
+    color: #6d6a6a;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-left: 200px;
+}
+.back-button:hover {
+    background-color: #cbcfd1;
+    color: black;
+    font-weight: 800;
+}

@@ -1,0 +1,120 @@
+* {
+    text-decoration: none;
+}
+/* General body styles */
+body {
+    background-color: #e4f6de;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    background: #508D4E;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #e4f6de;
+    color: rgb(13, 12, 12);
+}
+
+.sidebar a.active {
+    background-color: #dff8d7;
+    color: #000000;
+}
+
+.logo h5 {
+    margin-left: 60px;
+    color: #f2f2f2;
+    margin-top: -35px;
+}
+
+/* Table container */
+.table-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center items horizontally */
+    margin-left: 220px; /* Adjust based on your sidebar width */
+    margin-right: 20px; /* Add some right margin for spacing */
+    padding: 20px;
+}
+
+/* Button wrapper styles */
+.button-wrapper {
+    margin-bottom: 15px; /* Space below the button */
+    margin-left: -1110px;
+}
+
+/* Table styles */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white; /* Change to white background for the table */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.employee-table th,
+.employee-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Add a bottom border for separation */
+}
+
+.employee-table th {
+    background: #508D4E; /* Header background */
+    color: white;
+    font-weight: bold;
+}
+
+.employee-table tr:hover {
+    background-color: #f1f1f1; /* Highlight row on hover */
+}
+
+/* Icon styles */
+.icon {
+    display: flex;
+    justify-content: space-between; /* Space out action icons */
+}
+
+
+/* Button styles */
+.add-button {
+    background: #508D4E; /* Match sidebar color */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-bottom: 15px; /* Space below the button */
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background: #64af61; /* Lighter shade on hover */
+}
+
+
+/* Hover effect for action links */
+.employee-table td a i:hover {
+    font-size: 18px;
+    transition: font-size 0.2s ease;
+}
+
+

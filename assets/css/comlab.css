@@ -1,0 +1,153 @@
+
+body {
+    background-color: #e4f6de;
+  }
+  
+  .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      background:#508D4E;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding-top: 20px;
+      margin-top: -100px;
+  }
+  
+  .sidebar a {
+      display: block;
+      color: white;
+      padding: 16px;
+      text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+      background-color: #e4f6de;
+      color: rgb(13, 12, 12);
+  }
+  
+  .sidebar a.active {
+      background-color: #dff8d7;
+      color: #000000;
+  }
+  
+  .logo h5 {
+      margin-left: 60px;
+      color: #f2f2f2;
+      margin-top: -35px;
+  }
+
+.card-container {
+    margin-left: 280px;
+    margin-top: 100px;
+}
+
+.cards {
+    padding: 10px;
+    background-color: rgb(222, 223, 223);
+    margin-bottom: 10px;
+    width: 200px;
+    height: 150px;
+    display: inline-block;
+    margin-left: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.481); /* Add box shadow */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Add transition for smooth movement */
+}
+
+.cards img {
+    height: 120px;
+    width: 180px;
+    border-radius: 20px;
+}
+
+.cards h6 {
+    margin-left: 50px;
+}
+
+/* Add floating effect on hover */
+.cards:hover {
+    transform: translateY(-5px); /* Adjust the value to control the floating height */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.367); /* Add a slightly larger shadow on hover */
+}
+.modal-content {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 900px; /* Adjust the width as needed */
+    max-width: 100%; /* Optionally, set a maximum width to ensure responsiveness */
+}
+
+.modal-body {
+    padding: 10px;
+    
+}
+
+/* Modal image styles */
+.modal-body img {
+    width: 450px;
+    height: auto;
+    border-radius: 10px;
+    margin-left: 5px;
+}
+
+/* Close button styles */
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Add border bottom for each row */
+}
+
+.table-container th {
+    background-color: #f2f2f2; /* Background color for table header */
+}
+
+/* Alternate row color */
+.table-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover effect on rows */
+.table-container tr:hover {
+    background-color: #ddd;
+}
+button
+{
+    border-radius: 10px;
+    padding: 8px;
+    width: 120px;
+    border: none;
+    background-color: #04AA6D;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #18ea9d;
+    color: black;
+}
+button.btn
+{
+    margin-top: -20px;
+}

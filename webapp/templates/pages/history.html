@@ -1,0 +1,101 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %}
+<style>
+.attendance-table th
+{
+    background-color:#59b85b ;
+}
+    /* Custom Dropdown Styles */
+.dropdown-menu {
+    color: black; /* Font color */
+    background-color: #4CAF50; /* Background color */
+}
+
+.dropdown-menu a:hover {
+    background-color: #8BC34A; /* Hover background color */
+}
+
+.dropdown button
+{
+    background-color: #316cff;
+    margin-left: 15px;
+    padding-right:45px;
+}
+
+.dropdown button:hover
+{
+    background-color: #002b97;
+}
+button.btn
+{
+    margin-top: -20px;
+}
+</style>
+<section id="History">
+    
+    <!--SIDEBAR-->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'image/logoams.png' %}"  height="50px" width="50px" alt="CVSU logo">
+            <h5>CvSU Bacoor</h5>
+        </div>
+        <br>
+        <br>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Account
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'adminlogin'%}">Admin</a></li>
+                <li><a class="dropdown-item" href="{% url 'login'%}">Instructor</a></li>
+                <li><a class="dropdown-item" href="{% url 'student'%}">Student</a></li>
+            </ul>
+        </div>
+        <a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+        <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+        <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+        <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+        <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+        <a href="{% url 'orgList' %}" {% if request.path == '/orgList/' %}class="active"{% endif %}>Organizational Chart</a>
+        <a href="{% url 'history' %}" {% if request.path == '/history/' %}class="active"{% endif %}>History</a>
+        <a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>
+        <a href="{% url 'AdminStatus' %}" {% if request.path == '/AdminStatus/' %}class="active"{% endif %}>Status</a>
+        <a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}>Log out</a>
+    </div>
+    
+    <br> <br> <br> <br> 
+    
+    <div class="containerH scrolling-wrapper">
+        {% for cd in cd %}
+        <div class="box">
+            <div class="User-info">
+                <p> {{ cd.first_name }} {{ cd.last_name }}</p>
+            </div>
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Arrive</th>
+                        <th>Departure</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ cd.first_name }} {{ cd.last_name }}</td>
+                        <td>{{ cd.date }}</td>
+                        <td>{{ cd.time_in }} </td>
+                        <td>{{ cd.time_out }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+{% endblock %}

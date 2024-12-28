@@ -1,0 +1,91 @@
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    background:#508D4E;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding-top: 20px;
+}
+
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #e4f6de;
+    color: rgb(13, 12, 12);
+}
+
+.sidebar a.active {
+    background-color: #dff8d7;
+    color: #000000;
+}
+
+.logo h5 {
+    margin-left: 60px;
+    color: #f2f2f2;
+    margin-top: -35px;
+}
+#Attendance {
+  overflow: auto;
+  height: 100vh;
+}
+
+.custom-table {
+  width: 80%;
+  border-collapse: collapse;
+  margin:50px 0 0 220px;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 0px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table th {
+  background:#508D4E; 
+  color: #fff;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2; 
+}
+
+.custom-table tr:hover {
+  background-color: #d4edda;
+}
+
+form
+{
+    margin-right: 0;
+
+}
+button {
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: -55px;
+}
+button:hover {
+    background-color: #18ea9d;
+    color: black;
+}
+
+button.btn
+{
+    margin-top: -20px;
+}

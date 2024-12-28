@@ -1,0 +1,38 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-post-details.css' %}">
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>CvSU Bacoor</h5>
+    </div>
+    <br>
+    <br>
+    <a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+    <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+    <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+    <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+    <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+    <a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>
+    <a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}>Log out</a>
+</div>
+<title>{{ post.title }}</title>
+</head>
+
+<body>
+    <a href="{% url 'Apost' %}" class="back-button">◁</a>
+    <div class="post-container">
+        <h1>{{ post.title }}</h1>
+        <small>By: {{ post.author }}</small><br>
+        <hr>
+        <div class="post-body">
+            {{ post.body }}
+        </div>
+        <br>
+       
+    </div>
+</body>
+
+{% endblock %}

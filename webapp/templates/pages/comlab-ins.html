@@ -1,0 +1,151 @@
+{% extends 'pages/index.html' %}
+
+{% load static %}
+
+{% block content %}
+{% include 'pages/logout.html' %}
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/usercomlab.css' %}">
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+        <hr>
+    </div>
+  <br><br><br><br>
+    <!-- User Info Section -->
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            <div class="profile-container-sidebar">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+                <p class="user-name">{{ user.username }}</p>
+            </div>
+        {% endif %}
+        <hr>
+    </div>
+  
+    <a href="{% url 'user_data' %}" {% if request.resolver_match.url_name == 'user_data' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span>News</span></a>
+    <a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span>Profile</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.resolver_match.url_name == 'Icomlab' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span>Comlab</span></a>
+    <a href="#" id="logoutButton"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+  </div>
+
+<body>
+    <div class="card-container">
+        <div class="cards">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal1"> <img src="{% static 'image/comlab.jpg' %}" alt=""> </a>
+            <h6>COMLAB 1</h6>
+        </div>
+        <div class="cards">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal2"> <img src="{% static 'image/comlab.jpg' %}" alt=""> </a>
+            <h6>COMLAB 2</h6>
+        </div>
+        <div class="cards">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal3"> <img src="{% static 'image/comlab.jpg' %}" alt=""> </a>
+            <h6>COMLAB 3</h6>
+        </div>
+        <div class="cards">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal4"> <img src="{% static 'image/comlab.jpg' %}" alt=""> </a>
+            <h6>COMLAB 4</h6>
+        </div>
+        <div class="cards">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#modal4"> <img src="{% static 'image/comlab.jpg' %}" alt=""> </a>
+            <h6>COMLAB 5</h6>
+        </div>
+
+        <div class="table-container">
+            
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Equipment</th>
+                </tr>
+                {% for cl in cl %}
+                <tr>
+                    <td>{{ cl.name }}</td>
+                    <td>{{ cl.date }}</td>
+                    <td>{{ cl.equipment }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+           
+        </div>
+       
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'image/sched.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="modal2Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'image/sched.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal3" tabindex="-1" aria-labelledby="modal3Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'image/sched.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal4" tabindex="-1" aria-labelledby="modal4Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'image/sched.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
+        const userNameElement = document.querySelector('.user-info .user-name');
+        
+        if (userNameElement) {
+            const maxLength = 10; // Maximum character length before resizing
+            const originalText = userNameElement.textContent;
+
+            // Function to adjust font size
+            function adjustFontSize() {
+                if (originalText.length > maxLength) {
+                    let fontSize = 20; // Starting font size
+                    userNameElement.style.fontSize = fontSize + 'px';
+
+                    // Reduce font size until the text fits
+                    while (userNameElement.offsetWidth > userNameElement.parentElement.offsetWidth) {
+                        fontSize -= 1;
+                        userNameElement.style.fontSize = fontSize + 'px';
+                    }
+                }
+            }
+
+            adjustFontSize();
+        }
+    });
+    </script>
+    
+</body>
+
+{% endblock %}

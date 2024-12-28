@@ -1,0 +1,434 @@
+html, body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+/* Button */
+.btnadd {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 300px;
+  margin-top: 100px;
+  width: 150px;
+  border-radius: 4px;
+  transition: transform 0.3s; 
+}
+
+.btnadd:hover {
+  background-color: #18ea9d;
+  color: rgb(7, 5, 5);
+  transform: translateY(-2px) scale(1.05); 
+}
+
+
+/* Header */
+
+.head {
+  background: rgb(37,205,65);
+  background: linear-gradient(90deg, rgba(37,205,65,1) 0%, rgba(3,59,14,1) 0%, rgba(12,183,61,1) 40%);
+  padding: 16px;
+  padding-left: 380px;
+  font-size: 20px;
+  font-family: "Alfa Slab One", serif;
+  font-weight: 400;
+  font-style: normal;
+  margin-left: 200px;
+  position: fixed;
+  z-index: -1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.441);
+}
+h5{
+  color: rgb(255, 255, 255);
+  font-family: Arial, Helvetica, sans-serif;
+}
+/* Sidebar */
+.sidebar{
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(145deg, #13b93a, #03981e);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.5);
+  z-index: 1000;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background-color: #08964a;
+  color: rgb(13, 12, 12);
+}
+
+.sidebar a.active {
+  background-color: #53fba1; /* Change background color for active link */
+  color: #000000; /* Change text color for active link */
+}
+
+.logo h5{
+  margin-left: 60px;
+  color: #f2f2f2;
+  margin-top: -35px;
+}
+/* Content */
+
+
+/* Manage Emp **********************************************************/
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  
+}
+
+.content-at {
+  margin-left: 200px;
+  padding: 16px;
+  margin-bottom: 50px;
+  background-color: rgb(255, 0, 128);
+  overflow: hidden;
+  height: 100%;
+  margin-top: 50px;
+}
+
+.clock-frame {
+  background-color: #ffffff;
+  border: 2px solid #0000005e;
+  width: 300px;
+  margin: 20px auto 0;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 100px;
+  position: relative; /* Added to make it a positioning context */
+  border-radius: 10px;
+}
+
+.clock {
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  margin-bottom: 5px;
+}
+
+.date {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  font-size: 10px;
+  color: #059411;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px; /* Adjust the gap between cards as needed */
+  margin-left: 300px;
+  margin-top: -350px;
+}
+
+.card1 {
+  width: 150px;
+  padding: 20px;
+  background-color: #ede8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 20px;
+}
+
+.card1 img {
+  width: 100px; /* Adjust the width as needed */
+  height: 100px; /* Adjust the height as needed */
+  border-radius: 8px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+}
+
+.name1 {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+/* Employee section ***************************************************/
+#Employee {
+  overflow: auto;
+  height: 100vh;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table th {
+  background-color: #59b85b; /* Light green color for header */
+  color: #fff;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray background for even rows */
+}
+
+.custom-table tr:hover {
+  background-color: #d4edda; /* Light green background for hovered rows */
+}
+
+
+/*DTR****************************************************************/
+/* Container for the cards */
+.DtrContainer {
+  display: flex;
+  justify-content: center;
+}
+
+/* Styles for the card */
+.carddtr {
+  width: 200px;
+  margin-left: -530px;
+  padding: 20px;
+  background: #DDDDDD;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-top: 200px;
+}
+.carddtr:hover{
+  transform: translateY(-2px) scale(1.05); 
+  transition: 0.5s;
+}
+
+/* Styles for the content inside the card */
+.contentdtr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Styles for the image inside the card */
+.contentdtr img {
+  width: 100px; /* Adjust the width as needed */
+  height: 100px; /* Adjust the height as needed */
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Styles for the name inside the card */
+.contentdtr h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+
+h3 {
+  text-align: center;
+}
+/*=====*/
+.list-group{
+  margin-left: 260px;
+}
+
+
+/*History****************************************************************/
+
+form input {
+  height: 3.125rem;
+  padding: 0 1.25em;
+  font-size: 14px;
+  width:100% ;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  outline: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius:0 ;
+}
+
+.normal button{
+  background-color:rgb(176, 63, 63) ;
+  color: #fff;
+  white-space: nowrap;
+  border-top-left-radius: 0;
+  border-bottom-left-radius:0 ;
+}
+
+
+.containerH {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: calc(100% - 200px); /* Adjust according to your sidebar width */
+  padding: 20px;
+}
+
+
+
+.box {
+  width: 900px;
+  margin-right: 20px;
+  border-radius: 8px;
+  background-color: #f5f5f5; /* Light gray background */
+  padding: 20px;
+  margin-left: 250px;
+}
+
+.User-info {
+  text-align: center;
+}
+
+.User-info p {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.ui-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.attendance-table th {
+  background-color: #3c763d; /* Light green color for header */
+  color: #fff;
+}
+
+.attendance-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray background for even rows */
+}
+
+.attendance-table tbody tr:hover {
+  background-color: #d4edda; /* Light green background for hovered rows */
+}
+
+
+
+
+
+
+/*Add Data*/
+.btnadd {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Adjust the width as needed */
+  max-width: 400px; /* Set a maximum width */
+  text-align: center; /* Center the content */
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.form {
+  text-align: center;
+  font-size: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  text-align: start;
+  font-size: 15px;
+  
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.btnsubmit{
+  background-color: #18ea9d;
+  border: none;
+  border-radius: 2px;
+  padding: 15px ;
+  width: 120px;
+  
+}
+
+
+.containertb {
+    margin: 0 auto; /* This will horizontally center the table */
+    width: 80%; /* Adjust the width as needed */
+}
+
+
+/*add Emp*/
+
+
+
+
+
+
+/*main*/

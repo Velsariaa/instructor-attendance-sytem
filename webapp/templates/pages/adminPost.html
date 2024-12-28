@@ -1,0 +1,89 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'pages/logout.html' %}
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/adminPost.css' %}">
+
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+    </div>
+    <br><br><br><br>
+
+    <a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+    <a href="{% url 'main' %}" {% if request.resolver_match.url_name == 'main' %}class="active"{% endif %}>Instructor</a>
+    <a href="{% url 'attendance' %}" {% if request.resolver_match.url_name == 'attendance' %}class="active"{% endif %}>Attendance</a>
+    <a href="{% url 'schedule' %}" {% if request.resolver_match.url_name == 'schedule' %}class="active"{% endif %}>Schedule</a>
+    <a href="{% url 'dtrm' %}" {% if request.resolver_match.url_name == 'dtrm' %}class="active"{% endif %}>DTR</a>
+    <a href="{% url 'Acomlab' %}" {% if request.resolver_match.url_name == 'Acomlab' %}class="active"{% endif %}>Comlab</a>
+    <a href="#" id="logoutButton">Log out</a>
+</div>
+
+<div class="box">
+    <div class="pt profile-section">
+        <div class="profile-container">
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" width="100" height="100">
+            {% else %}
+                <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" width="100" height="100">
+            {% endif %}
+            <button class="buttonC" onclick="toggleCreatePost()">Create Post</button>
+        </div>
+        <hr>
+    </div>
+
+    <!-- Create Post Section -->
+    <div class="create-post-section" id="createPostSection" style="display: none;">
+        <form action="{% url 'Apost' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea name="body" placeholder="What's on your mind?" rows="4"></textarea>
+            <div class="post-options">
+                <label for="image-upload" aria-label="Add Photo"><i class="fas fa-image"></i> Add Photo</label>
+                <input type="file" id="image-upload" name="image" style="display: none;">
+            </div>
+            <div class="create-post-actions">
+                <button type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+
+    <ul>
+        {% if posts %}
+            {% for post in posts %}
+            <div class="cons">
+                <div class="post-content">
+                    <strong>{{ post.author }}</strong> <br>
+                    <span>{{ post.created_at }}</span><br>
+                    <div class="post-body">
+                        <p>{{ post.body }}</p>
+                    </div>
+                    {% if post.image %}
+                        <div class="post-container">
+                            <a href="{{ post.image.url }}" target="_blank">
+                                <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                            </a>
+                        </div>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-posts-message">
+                <p>No posts available. Be the first to share something!</p>
+            </div>
+        {% endif %}
+    </ul>
+</div>
+
+<script>
+    function toggleCreatePost() {
+        const createPostSection = document.getElementById('createPostSection');
+        createPostSection.style.display = createPostSection.style.display === 'none' || createPostSection.style.display === '' ? 'block' : 'none';
+    }
+</script>
+
+{% endblock %}

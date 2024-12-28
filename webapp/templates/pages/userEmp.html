@@ -1,0 +1,236 @@
+  {% extends 'pages/index.html' %}
+  {% load static %}
+
+  {% block content %}
+  {% include 'pages/logout.html' %}
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'css/userEmp.css' %}">
+
+  <style>
+    /* Make the background of instructor-info white */
+    .instructor-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Two equal-width columns */
+      gap: 20px; /* Space between the columns */
+      padding: 1em;
+      margin-top: 1em;
+      color: #333;
+      margin-left: 250px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      max-width: 1209px;
+    }
+
+    .instructor-info h3 {
+      font-size: 1.4em;
+      margin-bottom: 1em;
+      color: #222;
+      grid-column: span 2; /* Make the heading span across both columns */
+    }
+
+    .instructor-info .info-item {
+      margin-bottom: 1.2em;
+    }
+
+    .instructor-info .info-item input,
+    .instructor-info .info-item textarea {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      color: #666;
+      background: none;
+      border: none;
+      outline: none;
+      border-radius: 20px;
+      box-shadow: inset 8px 8px 8px #cbced15b, inset -8px -8px 8px #fff;
+      margin-top: 5px;
+    }
+
+    .instructor-info .info-item input::placeholder,
+    .instructor-info .info-item textarea::placeholder {
+      color: #bbb;
+      font-style: italic;
+    }
+
+    .instructor-info .info-item input[type="text"],
+    .instructor-info .info-item input[type="email"],
+    .instructor-info .info-item textarea {
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+
+    .instructor-info .info-item input[type="text"]:focus,
+    .instructor-info .info-item input[type="email"]:focus,
+    .instructor-info .info-item textarea:focus {
+      border-color: #0a7013;
+      box-shadow: 0 0 5px rgba(10, 112, 19, 0.4);
+    }
+
+    .instructor-info .info-item h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5em;
+      color: #444;
+    }
+
+    /* Button style */
+    .instructor-info .button-container button {
+      background-color: #0a7013;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 1em;
+    }
+
+    .instructor-info .button-container button:hover {
+      background-color: #30d73e;
+    }
+
+    /* Ensuring the links in the sidebar or menu won't overlap */
+    .menu a {
+      text-decoration: none;
+      color: #333;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border-radius: 5px;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .menu a:hover {
+      background-color: #f4f4f4;
+    }
+
+    .menu a.active {
+      background-color: #e0e0e0;
+    }
+  </style>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+        <hr>
+    </div>
+    <br><br><br><br>
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            <div class="profile-container-sidebar">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+                <p class="user-name">{{ user.username }}</p>
+            </div>
+        {% endif %}
+        <hr>
+    </div>
+    <a href="{% url 'user_data' %}" {% if request.path == '/user_data/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span class="navlink"> News</span></a>
+    <a href="{% url 'userEmp' %}" {% if request.resolver_match.url_name == 'userEmp' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span class="navlink"> Profile</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span class="navlink"> Comlab</span></a>
+    <a href="#" id="logoutButton" class="Logoutbtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+  </div>
+
+  <section id="Profile">
+    <div class="profile-container">
+      {% if user.userprofile.profile_picture %}
+      <img src="{{ user.userprofile.profile_picture.url }}" class="profile-img" alt="Profile Picture" id="profileImage">
+      {% else %}
+        <img src="{% static 'image/usericon.png' %}" class="profile-img" alt="Default Profile Picture">
+      {% endif %}
+      
+      <div class="profile-info">
+        <h2>{{ user_data.first_name }} {{ user_data.last_name }}</h2>
+        {% if user_data %}
+          <p>{{ user_data.bio }}</p>
+        {% else %}
+          <p>No bio available.</p>
+        {% endif %}
+      </div>
+
+      <div class="button-container">
+        <button class="edit"><a href="">Edit info </a> <i class="fa-solid fa-pen"></i></button>
+        <button class="add"><a href="">Add Post </a> <i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="menu">
+    <a class="Post" href="{% url 'userEmp' %}">Info</a>
+    <a class="Schedule" href="{% url 'userEmpSched' %}">Schedule</a>
+    <a class="Photos" href="Photos">Photos</a>
+  </div>
+
+  <div class="instructor-info">
+    <h3>Personal Information</h3>
+
+    <div class="info-item">
+      <h4>Name</h4>
+      <input type="text" placeholder="Enter Name" value="{{ user_data.first_name }} {{ user_data.last_name }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Address</h4>
+      <input type="text" placeholder="Enter Address" value="{{ user_data.address|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Date of Birth</h4>
+      <input type="text" placeholder="Enter Date of Birth" value="{{ user_data.date_of_birth|date:"F j, Y"|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Age</h4>
+      <input type="text" placeholder="Enter Age" value="{{ user_data.age|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Contact Number</h4>
+      <input type="text" placeholder="Enter Contact Number" value="{{ user_data.contact_number|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Email</h4>
+      <input type="email" placeholder="Enter Email" value="{{ user.email }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Current Workplace</h4>
+      <input type="text" placeholder="Enter Current Workplace" value="{{ user_data.current_workplace|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Position</h4>
+      <input type="text" placeholder="Enter Position" value="{{ user_data.position|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Working Experience</h4>
+      <input type="text" placeholder="Enter Working Experience" value="{{ user_data.working_experience|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Education</h4>
+      <input type="text" placeholder="Enter Education" value="{{ user_data.education|default:"Not Provided" }}" readonly>
+    </div>
+
+    <div class="info-item">
+      <h4>Skills</h4>
+      <textarea placeholder="Enter Skills" readonly>{{ user_data.skills|default:"Not Provided" }}</textarea>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var userNameElements = document.querySelectorAll('.user-info .user-name');
+        userNameElements.forEach(function(element) {
+            element.textContent = element.textContent.replace(/\./g, ' ');
+        });
+    });
+  </script>
+  {% endblock %}

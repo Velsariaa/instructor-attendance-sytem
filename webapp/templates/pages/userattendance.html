@@ -1,0 +1,84 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %}
+    <style>
+        /* Custom Dropdown Styles */
+.dropdown-menu {
+    color: black; /* Font color */
+    background-color: #4CAF50; /* Background color */
+}
+
+.dropdown-menu a:hover {
+    background-color: #8BC34A; /* Hover background color */
+}
+
+.dropdown button
+{
+    background-color: #316cff;
+    margin-left: 15px;
+    padding-right:45px;
+}
+
+.dropdown button:hover
+{
+    background-color: #002b97;
+}
+    </style>
+  
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}"  height="50px" width="50px" alt="CVSU logo">
+        <h5>CvSU Bacoor</h5>
+    </div>
+    <br>
+    <br>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'adminlogin'%}">Admin</a></li>
+            <li><a class="dropdown-item" href="{% url 'login'%}">Instructor</a></li>
+            <li><a class="dropdown-item" href="{% url 'student'%}">Student</a></li>
+        </ul>
+    </div>
+    <a href="{% url 'user_data' %}" {% if request.resolver_match.url_name == '/user_data/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span>News</span> </a>
+    <a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span>Instructor</span></a>
+    <a href="{% url 'UserA' %}" {% if request.path == '/UserA/' %}class="active"{% endif %}><i class="fa-solid fa-clipboard-user"></i> <span>Attendance</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span>Comlab</span></a>
+    <a href="{% url 'udtr' %}" {% if request.path == '/udtr/' %}class="active"{% endif %}><i class="fa-regular fa-address-card"></i> <span>DTR</span></a>
+    <a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+  </div>
+  <section id="Employee">
+  <div class="content-at">
+    <div class="clock-frame">
+      <div class="clock" id="clock"></div>
+      <div class="date" id="date">Loading...</div>
+    </div>
+    
+
+    <table class="table-striped table-bordered table-responsive custom-table">
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Date</th>
+        <th>Time In</th>
+        <th>Time Out</th>
+      </tr>
+      {% for At in At %}
+      <td>{{ At.IdNum }}</td>
+      <td>{{ At.first_name }} {{ At.last_name }}</td>
+      <td>{{ At.date }}</td>
+      <td>
+       {{ At.time_in }}
+      </td>
+      <td> {{ At.time_out }}</td>
+      </tr>
+      {% endfor %}
+  </table>
+  </div>
+</section>
+{% endblock %}

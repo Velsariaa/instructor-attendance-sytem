@@ -1,0 +1,36 @@
+-LANDING PAGE
+
+
+palagyan na yung mga link sa footer
+Reply ni arthur pogi: -anong mga ilalagay ko roon. Gagawan ko ba ng mga accounts?.
+
+carlo- yung ibang acc lang lagyan Kahit di na yung iba, pwede mo din palitan yun ng Kahit anong social media.
+
+-- palagyan ng hover yung pictures sa  features. 
+
+-- yung picture sa about masyadon nakadikit sa gilid, papantay lang sa picture sa feaures.
+
+-- palagyan din ng design yung background para di mag muka masyadong plain pero yung simple lang 
+
+-ROLE SELECTION paayos din 
+
+
+-INSTRUCTOR DOMAIN
+profile, comlab page gawing responsive
+
+-STUDENT DOMAIN 
+gawing responsive
+
+-ADMIN
+ayusin yung dtr 
+
+ 
+-orgchart 
+palagay sa landing page ng link para sa org chart ,
+tatanggalin ko na sa sidebar yung orgchart. 
+ 
+
+
+
+
+

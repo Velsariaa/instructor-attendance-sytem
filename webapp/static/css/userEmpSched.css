@@ -1,0 +1,186 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  html, body{
+    background-color: #e4f6de;
+  }
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    background:#508D4E;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding-top: 20px;
+    margin-top: -20px;
+  }
+  /* 
+  .sidebar:hover {
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.5);
+  } */
+  
+  .sidebar a {
+    display: block;
+    color: white;
+    padding: 16px;
+    text-decoration: none;
+  
+  }
+  
+  .sidebar a:hover {
+    background-color: #e4f6de;
+    color: rgb(13, 12, 12);
+  }
+  
+  .sidebar a.active {
+    background-color: #dff8d7;
+    color: #000000;
+  }
+  
+  .logo h5 {
+    margin-left: 60px;
+    color: #f2f2f2;
+    margin-top: -35px;
+  }
+  
+  .Logoutbtn span{
+    font-size: 20px;
+  }
+  
+  a span.navlink {
+    font-size: 20px;
+  }
+  #Profile{
+    background-color: #e4f6de;
+  }
+      .profile-container {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        background-color: rgb(255, 255, 255);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        max-width: 1210px;
+        margin-top: 20px;
+        margin-left: 250px;
+        position: relative;
+      }
+    
+      .profile-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        border: 1px solid #333;
+      }
+    
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+    
+      .profile-info h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+      }
+    
+      .profile-info p {
+        margin: 5px 0 0 0;
+        font-size: 16px;
+        color: #666;
+      }
+    
+      .button-container {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        gap: 10px;
+      }
+    
+      .button-container button {
+        border-radius: 8px; 
+        border: 1px solid rgba(128, 128, 128, 0.42);
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    
+      .button-container .edit:hover, .button-container .add:hover {
+        background-color: #508D4E;
+        border: none;
+      }
+  
+    button.add a, button.edit a {
+      text-decoration: none;
+      color: #333;
+    }
+      .profile-container-sidebar {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        
+      }
+  
+      .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: -60px;
+        box-shadow: 0px 0px 3px #03981e, /* Darker shade from the sidebar */
+                    0px 0px 0px 5px #22943c, /* Lighter shade from the sidebar */
+                    8px 8px 15px rgba(3, 92, 23, 0.942), /* Softer version of the lighter shade */
+                    -8px -8px 15px rgba(3, 152, 30, 0.563); /* Softer version of the darker shade */
+      }
+    
+      .user-info .user-name {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #ffffff;
+        margin-top: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }         
+  
+  
+      .menu{
+        max-width: 1210px;
+        display: flex;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        max-width: 1210px;
+        margin-top: 0px;
+        margin-left: 250px;
+        position: relative;
+        border-top: 1px solid rgba(172, 169, 169, 0.648);
+        padding-top: 10px;
+      }
+  
+      .menu a {
+        text-decoration: none;
+        color: #333;    
+        margin-right: 10px;
+      }
+      
+  
+  a.Schedule{
+    color: #08ad2f;
+    text-decoration: underline 3px;
+  }
+  
+  .menu a:hover{
+    font-weight: 700;
+  }
+  
+  

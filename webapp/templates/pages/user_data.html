@@ -1,0 +1,137 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    {% include 'pages/logout.html' %}
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/userdata.css' %}">
+</head>
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+        <hr>
+    </div>
+<br><br><br><br>
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            <div class="profile-container-sidebar">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+                <p class="user-name">{{ user.username }}</p>
+            </div>
+        {% endif %}
+        <hr>
+    </div>
+
+    <a href="{% url 'user_data' %}" {% if request.resolver_match.url_name == 'user_data' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i><span class="navlink"> News</span></a>
+    <a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i><span class="navlink" > Profile</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i><span class="navlink"> Comlab</span></a>
+    <a href="#" id="logoutButton" class="Logoutbtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+
+</div>
+
+<div class="box">
+    <div class="pt profile-section">
+        <div class="profile-container">
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" width="100" height="100">
+            {% else %}
+                <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" width="100" height="100">
+            {% endif %}
+            <button class="buttonC" onclick="toggleCreatePost()">Create Post</button>
+        </div>
+        <hr>
+    </div>
+
+    <!-- Create Post Section -->
+    <div class="create-post-section" id="createPostSection" style="display: none;">
+        <form action="{% url 'user_data' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea name="body" placeholder="What's on your mind?" rows="4"></textarea>
+            <div class="post-options">
+                <label for="image-upload" aria-label="Add Photo"><i class="fas fa-image"></i> Add Photo</label>
+                <input type="file" id="image-upload" name="image" style="display: none;">
+            </div>
+            <div class="create-post-actions">
+                <button type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+
+    <ul>
+        {% if posts %}
+            {% for post in posts %}
+            <div class="cons">
+                <div class="post-content">
+                    <strong>{{ post.author }}</strong> <br>
+                    <span>{{ post.created_at }}</span><br>
+                    <div class="post-body">
+                        <p>{{ post.body }}</p>
+                    </div>
+                    {% if post.image %}
+                        <div class="post-container">
+                            <a href="{{ post.image.url }}" target="_blank">
+                                <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                            </a>
+                        </div>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-posts-message">
+                <p>No posts available. Be the first to share something!</p>
+            </div>
+        {% endif %}
+    </ul>
+</div>
+
+<script>
+    function toggleCreatePost() {
+        const createPostSection = document.getElementById('createPostSection');
+        createPostSection.style.display = createPostSection.style.display === 'none' || createPostSection.style.display === '' ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var userNameElements = document.querySelectorAll('.user-info .user-name');
+        userNameElements.forEach(function(element) {
+            element.textContent = element.textContent.replace(/\./g, ' ');
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const userNameElement = document.querySelector('.user-info .user-name');
+        
+        if (userNameElement) {
+            const maxLength = 10; // Maximum character length before resizing
+            const originalText = userNameElement.textContent;
+
+            // Function to adjust font size
+            function adjustFontSize() {
+                if (originalText.length > maxLength) {
+                    let fontSize = 20; // Starting font size
+                    userNameElement.style.fontSize = fontSize + 'px';
+
+                    // Reduce font size until the text fits
+                    while (userNameElement.offsetWidth > userNameElement.parentElement.offsetWidth) {
+                        fontSize -= 1;
+                        userNameElement.style.fontSize = fontSize + 'px';
+                    }
+                }
+            }
+
+            adjustFontSize();
+        }
+    });
+
+</script>
+
+{% endblock %}

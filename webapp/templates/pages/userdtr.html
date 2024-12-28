@@ -1,0 +1,72 @@
+{% extends 'pages/index.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<style>
+  
+.table-container {
+    position: relative; /* or absolute, fixed, etc. */
+    top: 0.5px; /* adjust as needed */
+    left: 25%; /* adjust as needed */
+    width: 60%;
+    height: 200px;
+    margin-top: -150px;
+}
+
+</style>
+
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+      <img src="{% static 'image/logoams.png' %}"  height="50px" width="50px" alt="CVSU logo">
+      <h5>CvSU Bacoor</h5>
+  </div>
+    <br><br><br><br>
+<a href="{% url 'user_data' %}" {% if request.resolver_match.url_name == '/user_data/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span>News</span> </a>
+<a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span>Instructor</span></a>
+<a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span>Comlab</span></a>
+<a href="{% url 'udtr' %}" {% if request.path == '/udtr/' %}class="active"{% endif %}><i class="fa-regular fa-address-card"></i> <span>DTR</span></a>
+<a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+  
+</div>
+<br><br>
+<br>
+<br>
+<br>
+
+<center><h1>Daily Time Record</h1></center>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="table-container">
+<table class="table-striped table-bordered table-responsive custom-table">
+  <tr>
+    <th>Employee ID</th>
+    <th>Name</th>
+    <th>View Daily Time Record</th>
+    
+   
+  </tr>
+  {% for Ls in Ls %}
+  <tr>
+    <td>{{ Ls.idNum }}</td>
+    <td>{{ Ls.first_name }}</td>
+    <td><a href="{% url 'dtr' Ls.id %}"> Click here to view</a></td>
+    
+    
+  </tr>
+  {% endfor %}
+</table>
+</div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %} 
+<link rel="stylesheet" href="{% static 'css/student.css' %}">
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>CvSU Bacoor</h5>
+    </div>
+    <br>
+    <br>
+
+    <a href="{% url 'student' %}" {% if request.resolver_match.url_name == '/student/' %}class="active"{% endif %}>News</a>
+    <a href="{% url 'studorg' %}" {% if request.path == '/studorg/' %}class="active"{% endif %}>Organizational Chart</a>
+   
+</div>
+
+<div class="box">
+    <div class="pt profile-section">
+        <div class="profile-container">
+            {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture">
+            {% endif %}
+            <a class="buttonC" href="{% url 'createpost' %}"><button>Create Post</button></a>
+        </div>
+        <hr>
+    </div>
+    <ul>
+        {% for posts in posts %}
+        <div class="cons">
+            <div class="post-content">
+               <strong>{{ posts.author }}</strong>  <br>
+                <br>
+                <a href="{% url 'admin-details' posts.pk %}">
+                    <strong class="title">{{ posts.title }}</strong>
+                </a>
+                
+                <br>
+                <br>
+                <div class="post-container">
+                {{ posts.body }} <br>
+                <span>{{ posts.created_at }}</span> 
+                </div>
+                <br><br><br>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
+

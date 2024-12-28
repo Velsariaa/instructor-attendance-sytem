@@ -1,0 +1,117 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance </title>
+    <style>
+        body{
+            background-color: #74777441;
+        }
+        .container1 {
+            width: 30%; /* Set the width of the container */
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 20px; /* Add padding to the container */
+            background-color: #059411; /* Set background color */
+            border-radius: 5px; /* Add rounded corners to the container */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        }
+        .container2 {
+            width: 30%; /* Set the width of the container */
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 20px; /* Add padding to the container */
+            background-color: #059411; /* Set background color */
+            border-radius: 5px; /* Add rounded corners to the container */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        }
+        .content{
+            text-align: center;
+        }
+        h2{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 20px;
+            font-weight: bolder;
+            color: black;
+        }
+        h1{
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bolder;
+        }
+
+
+.clock-frame {
+  background-color: #ffffff;
+  border: 2px solid #0000005e;
+  width: 300px;
+  margin: 20px auto 0;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 100px;
+  position: relative; /* Added to make it a positioning context */
+  border-radius: 10px;
+}
+
+.clock {
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  margin-bottom: 5px;
+}
+
+.date {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  font-size: 10px;
+  color: #059411;
+}
+.containerEmp {
+    background-color: #059411;
+    border: 2px solid #0000005e;
+  width: 300px;
+  margin: 20px auto 0;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  border-radius: 10px;
+
+    
+}
+    </style>
+</head>
+<body>
+<br>
+
+
+<div class="containerEmp">
+    <h1>Employee Attendance</h1>
+</div>
+    <br>
+    <br>
+    <br>
+          <div class="clock-frame">
+            <div class="clock" id="clock"></div>
+            <div class="date" id="date">Loading...</div>
+          </div>
+    <a href="{% url 'time_in' %}">
+    <div class="container1">
+        <div class="content">
+    <h2>Time In </h2>
+    </a>
+    </div>
+    </div>
+    <br>
+    <br>
+    
+
+    <a href="{% url 'time_out' %}">
+    <div class="container2">
+        <div class="content">
+    <h2>Time out </h2>
+    </a>
+</div>
+</div>
+<script src="{% static 'js/live-clock.js' %}"></script>
+
+</body>
+</html>

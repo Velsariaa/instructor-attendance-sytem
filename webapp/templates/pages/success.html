@@ -1,0 +1,41 @@
+{% extends 'pages/index.html' %}
+
+{% load static %}
+   
+{% block content %}
+<section id="ManageEmployee">
+    <div class="head" style="position: fixed; width: 100%; z-index: 100;">
+        <header>Attendance Monitoring System</header>
+    </div>
+    <!--SIDEBAR-->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+            <br>
+            <br>
+            <br>
+
+            <h5>CvSU Bacoor</h5>
+        </div>
+        <br>
+        <br>
+        <a href="{% url 'addEmp' %}" {% if request.resolver_match.url_name == 'addEmp' %}class="active"{% endif %}>Add Employee</a>
+        <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Employee</a>
+        <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+        <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+        <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+        <a href="{% url 'orgList' %}" {% if request.path == '/orgList/' %}class="active"{% endif %}>Organizational Chart</a>
+        <a href="{% url 'position' %}" {% if request.path == '/position/' %}class="active"{% endif %}>Position</a>
+        <a href="{% url 'history' %}" {% if request.path == '/history/' %}class="active"{% endif %}>History</a>
+
+    </section>
+
+</head>
+<body>
+    <h1>Form Submitted Successfully</h1>
+    <p>Thank you, for your submission!</p>
+</body>
+</html>
+
+{% endblock %}
+

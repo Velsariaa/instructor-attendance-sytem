@@ -1,0 +1,112 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'pages/logout.html' %}
+
+<style>
+  /* Table Container Styles */
+  .table-container {
+      /*margin: 20px auto;*/
+      padding: 20px;
+      max-width: 90%;
+      border-radius: 8px
+  }
+  
+  /* Table Styles */
+  .custom-table {
+      /*width: 100%;*/
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+      padding: 12px 20px;
+      text-align: left;
+      border: 1px solid #ddd;
+  }
+  
+  .custom-table th {
+      background-color: #4CAF50; /* Green background for header */
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+  }
+  
+  .custom-table tr:nth-child(even) {
+      background-color: #f2f2f2; /* Light grey for even rows */
+  }
+  
+  .custom-table tr:hover {
+      background-color: #ddd; /* Highlight row on hover */
+  }
+  
+  .custom-table td a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+  }
+  
+  .custom-table td a:hover {
+      text-decoration: underline;
+      color: #0056b3; /* Darker shade of blue on hover */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+      .custom-table th,
+      .custom-table td {
+          padding: 8px 10px;
+      }
+      .table-container {
+          padding: 15px;
+          margin: 10px;
+      }
+  }
+  
+  </style>
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/dtrm.css' %}">
+
+<div class="sidebar">
+  <div class="logo">
+      <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+      <h5>OMSUFB</h5>
+  </div>
+  <br><br><br><br>
+  <a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+  <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+  <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+  <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+  <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+  <a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>
+  <a href="#" id="logoutButton">Log out</a>
+</div>
+
+<div class="table-container">
+  <table class="table-striped table-bordered table-responsive custom-table">
+    <tr>
+      <th>Employee ID</th>
+      <th>First Name</th>
+      <th>Middle Name</th>
+      <th>Surname Name</th>
+      <th>Position</th>
+      <th>View Daily Time Record</th>
+    </tr>
+    {% for Ls in Ls %}
+    <tr>
+      <td>{{ Ls.idNum }}</td>
+      <td>{{ Ls.first_name }}</td>
+      <td>{{ Ls.middle_name }}</td>
+      <td>{{ Ls.last_name }}</td>
+      <td>{{ Ls.position }}</td>
+      <td><a href="{% url 'dtr' Ls.id %}">Click here to view</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+{% endblock %}

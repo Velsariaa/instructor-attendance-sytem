@@ -1,0 +1,52 @@
+
+body {
+    background-color: #e4f6de;
+  }
+  .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      background:#508D4E;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding-top: 20px;
+  }
+  
+  .sidebar a {
+      display: block;
+      color: white;
+      padding: 16px;
+      text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+      background-color: #e4f6de;
+      color: rgb(13, 12, 12);
+  }
+  
+  .sidebar a.active {
+      background-color: #dff8d7;
+      color: #000000;
+  }
+  
+  .logo h5 {
+      margin-left: 60px;
+      color: #f2f2f2;
+      margin-top: -35px;
+  }
+  
+.table-container {
+    position: relative; /* or absolute, fixed, etc. */
+    top: 0.5px; /* adjust as needed */
+    left: 25%; /* adjust as needed */
+    width: 60%;
+    height: 200px;
+    /* Add any other positioning properties as needed */
+
+}
+s
+button.btn
+{
+    margin-top: -20px;
+}
+  

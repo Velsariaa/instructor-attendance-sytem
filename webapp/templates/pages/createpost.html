@@ -1,0 +1,68 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/createpost.css' %}">
+
+<div class="sidebar">
+    <div class="logo">
+        <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+        <h5>OMSUFB</h5>
+        <hr>
+    </div>
+  <br><br>
+
+    <div class="user-info">
+        {% if user.is_authenticated %}
+            <div class="profile-container-sidebar">
+                {% if user.userprofile.profile_picture %}
+                    <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+                <p class="user-name">{{ user.username }}</p>
+            </div>
+        {% endif %}
+        <hr>
+    </div>
+  
+    <a style="background-color:#dff8d7; color: black;" href="{% url 'user_data' %}" {% if request.resolver_match.url_name == 'user_data' or request.path == '/user_data/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i><span class="navlink"> News</span></a>
+    <a href="{% url 'userEmp' %}" {% if request.path == '/userEmp/' %}class="active"{% endif %}><i class="fa-regular fa-user"></i><span class="navlink" > Profile</span></a>
+    <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i><span class="navlink"> Comlab</span></a>
+    <a href="{% url 'logout' %}" {% if request.path == '/logout/' %}class="active"{% endif %}><i class="fa-solid fa-arrow-right-from-bracket"></i><span class="navlink"> Log out</span></a>
+  </div>
+  
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+        const userNameElement = document.querySelector('.user-info .user-name');
+        
+        if (userNameElement) {
+            const maxLength = 10; // Maximum character length before resizing
+            const originalText = userNameElement.textContent;
+
+            // Function to adjust font size
+            function adjustFontSize() {
+                if (originalText.length > maxLength) {
+                    let fontSize = 20; // Starting font size
+                    userNameElement.style.fontSize = fontSize + 'px';
+
+                    // Reduce font size until the text fits
+                    while (userNameElement.offsetWidth > userNameElement.parentElement.offsetWidth) {
+                        fontSize -= 1;
+                        userNameElement.style.fontSize = fontSize + 'px';
+                    }
+                }
+            }
+
+            adjustFontSize();
+        }
+    });
+</script>
+{% endblock %}

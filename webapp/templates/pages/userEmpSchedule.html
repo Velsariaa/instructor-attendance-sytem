@@ -1,0 +1,79 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+   
+{% block content %}
+{% include 'pages/logout.html' %}
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+<link rel="stylesheet" href="{% static 'css/userEmpSched.css' %}">
+<!--SIDEBAR-->
+<div class="sidebar">
+  <div class="logo">
+      <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+      <h5>OMSUFB</h5>
+      <hr>
+  </div>
+<br><br><br><br>
+  <div class="user-info">
+      {% if user.is_authenticated %}
+          <div class="profile-container-sidebar">
+              {% if user.userprofile.profile_picture %}
+                  <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+              {% else %}
+                  <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
+              {% endif %}
+              <p class="user-name">{{ user.username }}</p>
+          </div>
+      {% endif %}
+      <hr>
+  </div>
+
+  <a href="{% url 'user_data' %}" {% if request.path == '/user_data/' %}class="active"{% endif %}><i class="fa-regular fa-newspaper"></i> <span class="navlink" > News</span></a>
+  <a href="{% url 'userEmpSched' %}" {% if request.resolver_match.url_name == 'userEmpSched' %}class="active"{% endif %}><i class="fa-regular fa-user"></i> <span class="navlink" > Profile</span></a>
+  <a href="{% url 'Icomlab' %}" {% if request.path == '/Icomlab/' %}class="active"{% endif %}><i class="fa-solid fa-computer"></i> <span class="navlink" > Comlab</span></a>
+  <a href="#" id="logoutButton" class="Logoutbtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Log out</span></a>
+</div>
+
+<section id="Profile">
+  <div class="profile-container">
+    {% if user.userprofile.profile_picture %}
+      <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+    {% else %}
+      <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture">
+    {% endif %}
+
+    <div class="profile-info">
+      <h2>{{ user_data.first_name }} {{ user_data.last_name }}</h2>
+      {% if user_data %}
+        <p>{{ user_data.bio }}</p>
+      {% else %}
+        <p>No bio available.</p>
+      {% endif %}
+    </div>
+    <div class="button-container">
+      <button class="edit"><a href="">Edit info </a> <i class="fa-solid fa-pen"></i></button>
+      <button class="add"><a href="">Add Post </a> <i class="fa-solid fa-plus"></i></button>
+    </div>
+  </div>
+</section>
+<div class="menu">
+  <ul>
+    <a class="Post" href="{% url 'userEmp' %}">Info</a>
+    <a class="Schedule" href="{% url 'userEmpSched' %}">Schedule</a>
+    <a class="Photos" href="Photos">Photos</a>
+  </ul>
+</div>
+
+    
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var userNameElements = document.querySelectorAll('.user-info .user-name');
+      userNameElements.forEach(function(element) {
+          element.textContent = element.textContent.replace(/\./g, ' ');
+      });
+  });
+</script>
+{% endblock %}
+
