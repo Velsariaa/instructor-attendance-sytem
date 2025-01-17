@@ -463,3 +463,9 @@ def instructor_schedule_view(request, idNum):  # Parameter matches the column na
         'form': form,
     }
     return render(request, 'pages/instructor_schedule.html', context)
+
+def delete_schedule(request, schedule_id):
+    schedule = get_object_or_404(Ins_Schedule, id=schedule_id)
+    employee_id = schedule.employee.idNum
+    schedule.delete()
+    return redirect('Ins_Schedule', idNum=employee_id)

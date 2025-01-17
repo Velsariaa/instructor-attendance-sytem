@@ -38,6 +38,7 @@ urlpatterns = [
     path('user_data/', views.user_data, name='user_data'),
     path('Roles/', views.role_selection, name="roles"),
     path('Logout/', views.logout, name='Logout'),
+    path('schedule/delete/<int:schedule_id>/', views.delete_schedule, name='delete_schedule'),
     path('schedule/delete/<int:schedule_id>/', views.edit_schedule, name='edit_schedule'),
     path('schedule/<str:idNum>/', views.instructor_schedule_view, name='Ins_Schedule'),
 ]
