@@ -23,16 +23,20 @@
 
 <div class="card-container">
   {% for ls in Ls %}
-    <div class="card">
-      {% if ls.profile %}
-        <img class="card-img" src="{{ ls.profile.url }}" alt="Profile Picture">
-      {% else %}
-        <img class="card-img" src="{% static 'path/to/default/profile/image.jpg' %}" alt="Default Profile Picture">
-      {% endif %}
-      <div class="card-info">
-        <h5 class="card-name">{{ ls.first_name }}</h5>
+  <p>{{ ls.id }}: {{ ls.first_name }} {{ ls.last_name }}</p>
+  <a href="{% url 'Ins_Schedule' idNum=ls.idNum %}">
+      <div class="card">
+        {% if ls.profile %}
+          <img class="card-img" src="{{ ls.profile.url }}" alt="Profile Picture">
+        {% else %}
+          <img class="card-img" src="{% static 'path/to/default/profile/image.jpg' %}" alt="Default Profile Picture">
+        {% endif %}
+        <div class="card-info">
+          <h5 class="card-name">{{ ls.first_name }}</h5>
+        </div>
       </div>
-    </div>
+    </a>
   {% endfor %}
 </div>
+
 {% endblock %}

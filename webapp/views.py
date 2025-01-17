@@ -7,6 +7,9 @@ from django.contrib.auth.models import User # type: ignore
 from .models import  Equipment, UserProfile,UserData, Employee, OrgChartList, TimeRecord,Attendance, Post, DailyTimeRecords,Schedule,History,Comlab,Availability,PositionDCS
 from .forms import  ListofstaffForm, OrgChartListForm, ListofstaffForms, TimeRecordForm, PostForm,Dtrc,SuperUserLoginForm,EquipmentForm
 from django.contrib.auth.decorators import login_required # type: ignore
+from .models import Instructor, Ins_Schedule
+from .forms import ScheduleForm
+from django.http import Http404
 
 
 def home(request):
@@ -401,3 +404,62 @@ def role_selection(request):
 def logout(request):
     return render(request, 'pages/logout.html')
     
+def instructor_schedule(request, instructor_id):
+    instructor = get_object_or_404(Instructor, id=instructor_id)
+    schedules = Ins_Schedule.objects.filter(instructor=instructor)
+    context = {
+        'instructor': instructor,
+        'schedules': schedules,
+    }
+    return render(request, 'pages/instructor_schedule.html', context)
+
+def add_schedule(request, instructor_id):
+    instructor = get_object_or_404(Instructor, id=instructor_id)
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST)
+        if form.is_valid():
+            schedule = form.save(commit=False)
+            schedule.instructor = instructor
+            schedule.save()
+            return redirect('instructor_schedule', instructor_id=instructor.id)
+    else:
+        form = ScheduleForm()
+    return render(request, 'pages/add_edit_schedule.html', {'form': form, 'instructor': instructor})
+
+def edit_schedule(request, schedule_id):
+    schedule = get_object_or_404(Ins_Schedule, id=schedule_id)
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST, instance=schedule)
+        if form.is_valid():
+            form.save()
+            return redirect('instructor_schedule', instructor_id=schedule.instructor.id)
+    else:
+        form = ScheduleForm(instance=schedule)
+    return render(request, 'pages/add_edit_schedule.html', {'form': form})
+
+def instructor_schedule_view(request, idNum):  # Parameter matches the column name
+    try:
+        # Query using idNum
+        employee = Employee.objects.get(idNum=idNum)
+    except Employee.DoesNotExist:
+        raise Http404("Employee not found")
+    
+    # Filter schedules for this employee
+    schedules = Ins_Schedule.objects.filter(employee=employee)
+    
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST)
+        if form.is_valid():
+            schedule = form.save(commit=False)
+            schedule.employee = employee  # Link schedule to the employee
+            schedule.save()
+            return redirect('Ins_Schedule', idNum=employee.idNum)
+    else:
+        form = ScheduleForm()
+
+    context = {
+        'employee': employee,
+        'schedules': schedules,
+        'form': form,
+    }
+    return render(request, 'pages/instructor_schedule.html', context)

@@ -219,3 +219,23 @@ class Availability(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Instructor(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    profile = models.ImageField(upload_to='profiles/', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+class Ins_Schedule(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, to_field='idNum')
+    subject = models.CharField(max_length=100)
+    section = models.CharField(max_length=50)
+    days = models.CharField(max_length=10)
+    time = models.TimeField()
+    room = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.subject} ({self.days})"

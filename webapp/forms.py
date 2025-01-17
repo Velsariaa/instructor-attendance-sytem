@@ -1,5 +1,6 @@
 from django import forms # type: ignore
 from .models import Employee, OrgChartList, Post, UserData, Equipment,Availability
+from .models import Ins_Schedule
 
 class Dtrc(forms.Form):
     image  = forms.ImageField(label='Profile Picture', required=False)
@@ -60,3 +61,8 @@ class UserDataForm(forms.ModelForm):
     class Meta:
         model = UserData
         fields = '__all__'  # List the fields you want to include in the form
+
+class ScheduleForm(forms.ModelForm):
+    class Meta:
+        model = Ins_Schedule
+        fields = ['subject', 'section', 'days', 'time', 'room']
