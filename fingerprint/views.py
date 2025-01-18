@@ -11,21 +11,33 @@ from rest_framework import status
 def index(request):
     return render(request, 'pages/test.html')
 
-def mode():
-    pass
 
 @api_view(['GET', 'POST'])
 def is_active(request):
     cache_key = 'fingerprint_active'
     
     if request.method == 'POST':
-        active_state = request.data.get('is_active', False)
+        active_state = request.data.get('is_active', False)  # Make this toggleable
         cache.set(cache_key, active_state, timeout=None)  
         return Response({'status': 'success', 'is_active': active_state})
         
     if request.method == 'GET':
-        is_active = cache.get(cache_key, True)  
+        is_active = cache.get(cache_key, False)   # Make this toggleable
         return Response({'is_active': is_active})
+    
+
+@api_view(['GET', 'POST'])
+def mode(request):
+    cache_key = 'fingerprint_mode'
+    
+    if request.method == 'POST':
+        mode_state = request.data.get('mode', 'verify')   # Make this toggleable
+        cache.set(cache_key, mode_state, timeout=None)  
+        return Response({'status': 'success', 'mode': mode_state})
+        
+    if request.method == 'GET':
+        current_mode = cache.get(cache_key, 'verify')  # Make this toggleable
+        return Response({'mode': current_mode})
 
 
 @api_view(['POST'])
@@ -41,4 +53,6 @@ def verify(request):
         match_id = JSONParser().parse(request)
         print(match_id)
     return render(request, 'pages/test.html')
+
+
 

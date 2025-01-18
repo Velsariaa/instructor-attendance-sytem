@@ -12,13 +12,14 @@
 #define MODE_DELETE_ALL 4
 
 
-const char* server_url = "http://192.168.1.9:8000";
+const char* server_url = "http://192.168.165.248:8000";
 const char* is_active_api = "/fingerprint/is_active";
+const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
 const char* verify_api = "/fingerprint/verify";
 
-const char* ssid = "";      
-const char* password = ""; 
+const char* ssid = "test";      
+const char* password = "88888888"; 
 
 SoftwareSerial mySerial(TX, RX); 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
@@ -27,24 +28,9 @@ volatile int finger_status = -1;
 int mode = MODE_IDLE;  
 uint8_t id = 1;
 
-void setup()  
-{
-  Serial.begin(9600);
-  while (!Serial); 
-  delay(100);
 
-  wifiSetup();
-  fingerprintSetup();
-}
-
-
-void loop() {
-
-  if (!checkIfActive()) {
-    delay(1000);  
-    return;
-  }
-
+void manualFingerprintCommands() {
+    
   if (Serial.available()) {
     char cmd = Serial.read();
     
@@ -73,10 +59,35 @@ void loop() {
     }
     mode = MODE_IDLE;
   }
+}
+
+void setup()  
+{
+  Serial.begin(9600);
+  while (!Serial); 
+  delay(100);
+
+  wifiSetup();
+  fingerprintSetup();
+}
+
+
+void loop() {
+
+  if (!checkIfActive()) {
+    delay(1000);  
+    return;
+  }
+
+  if (!checkMode()) {
+    delay(1000);  
+    return;
+  }
 
   if (mode == MODE_ENROLL) {
     getFingerprintEnroll();
-    mode = MODE_IDLE;  // Set back to idle after enrollment
+    // After enrollment, automatically switch back to verify mode
+    mode = MODE_VERIFY;
   } else if (mode == MODE_VERIFY) {
     finger_status = getFingerprintIDez();
     if (finger_status != -1 && finger_status != -2) {
@@ -275,8 +286,35 @@ uint8_t getFingerprintEnroll() {
   } else {
     Serial.println("Failed to send to server");
   }
+
+  postVerifyMode();
   
   return FINGERPRINT_OK;
+}
+
+bool postVerifyMode() {
+  WiFiClient client;
+  HTTPClient http;
+  
+  String url = String(server_url) + String(mode_api);
+  
+  http.begin(client, url);
+  http.addHeader("Content-Type", "application/json");
+  
+  String jsonData = "{\"mode\": \"verify\"}";
+  int httpResponseCode = http.POST(jsonData);
+  
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    Serial.println("HTTP Response code: " + String(httpResponseCode));
+    Serial.println("Response: " + response);
+    return true;
+  } else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+     return false;
+  }
+  http.end();
 }
 
 bool postFingerprintData(String jsonData) {
@@ -340,4 +378,32 @@ bool postVerificationResult(String jsonData) {
     http.end();
     return false;
   }
+}
+
+bool checkMode() {
+  WiFiClient client;
+  HTTPClient http;
+  
+  String url = String(server_url) + String(mode_api);
+  
+  http.begin(client, url);
+  int httpResponseCode = http.GET();
+  
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    http.end();
+    
+    if (response.indexOf("enroll") > -1) {
+      mode = MODE_ENROLL;
+      return true;
+    } else if (response.indexOf("verify") > -1) {
+      mode = MODE_VERIFY;
+      return true;
+    }
+  }
+
+  Serial.println(httpResponseCode);
+  
+  http.end();
+  return false;
 }
