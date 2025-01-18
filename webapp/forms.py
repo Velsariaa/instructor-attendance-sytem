@@ -1,6 +1,7 @@
 from django import forms # type: ignore
-from .models import Employee, OrgChartList, Post, UserData, Equipment,Availability
+from .models import Employee, OrgChartList, Post, UserData, Equipment, Availability
 from .models import Ins_Schedule
+import datetime  # Add this import
 
 class Dtrc(forms.Form):
     image  = forms.ImageField(label='Profile Picture', required=False)
@@ -65,4 +66,20 @@ class UserDataForm(forms.ModelForm):
 class ScheduleForm(forms.ModelForm):
     class Meta:
         model = Ins_Schedule
-        fields = ['subject', 'section', 'days', 'time', 'room']
+        fields = ['subject', 'section', 'days', 'time', 'end_time', 'room']
+        widgets = {
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def clean_time(self):
+        time = self.cleaned_data.get('time')
+        if isinstance(time, datetime.time):
+            return time.isoformat()
+        return time
+
+    def clean_end_time(self):
+        end_time = self.cleaned_data.get('end_time')
+        if isinstance(end_time, datetime.time):
+            return end_time.isoformat()
+        return end_time

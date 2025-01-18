@@ -235,6 +235,7 @@ class Ins_Schedule(models.Model):
     section = models.CharField(max_length=50)
     days = models.CharField(max_length=10)
     time = models.TimeField()
+    end_time = models.TimeField()  # Ensure this field is correctly defined
     room = models.CharField(max_length=50)
 
     def __str__(self):
