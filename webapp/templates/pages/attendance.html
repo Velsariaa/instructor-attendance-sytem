@@ -32,34 +32,28 @@
     
 
     <table class="table-striped table-bordered table-responsive custom-table">
-      <tr>
-        <th>Id</th>
-        <th>Username</th>
-        <th>Date</th>
-        <th>Time In</th>
-        <th>Time Out</th>
-        <th>Action</th>
-      </tr>
-      {% for At in At %}
-      <tr>
-        <td>{{ At.IdNum }}</td>
-        <td>{{ At.first_name }} {{ At.last_name }}</td>
-        <td>{{ At.date }}</td>
-        <td>
-         {{ At.time_in }}
-        </td>
-        <td> {{ At.time_out }}</td>
-        <td>
-            <form method="POST" action="{% url 'copy_user_data' %}">
-                {% csrf_token %}
-                <input type="hidden" name="user_id" value="{{ At.id }}">
-                <button type="submit">Copy Data</button>
-                
-            </form>
-        </td>
-      </tr>
-      {% endfor %}
-  </table>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+            <th>Status</th>
+        </tr>
+        {% for At in At %}
+        <tr>
+            <td>{{ At.IdNum }}</td>
+            <td>{{ At.first_name }} {{ At.last_name }}</td>
+            <td>{{ At.date }}</td>
+            <td>{{ At.time_in }}</td>
+            <td>{{ At.time_out }}</td>
+            <td>
+                {{ availability_data.At.first_name|default:"No Status" }} <!-- Display the status -->
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
   </div>
 </section>
 {% endblock %}

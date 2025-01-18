@@ -68,7 +68,21 @@ def attendance_page(request):
     At = Attendance.objects.all()
     Tr = TimeRecord.objects.all()
     sd = Schedule.objects.all()
-    return render(request, 'pages/attendance.html', {'At': At, 'Tr':Tr, 'sd': sd})
+    
+    # Fetch all availability statuses
+    availability_data = {
+        availability.name: availability.status
+        for availability in Availability.objects.all()
+    }
+
+    # Pass the availability data to the template
+    return render(request, 'pages/attendance.html', {
+        'At': At,
+        'Tr': Tr,
+        'sd': sd,
+        'availability_data': availability_data,
+    })
+
 
 def history_page(request):
     cd = History.objects.all()
