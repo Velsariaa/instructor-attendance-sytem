@@ -23,7 +23,7 @@
 
 <div class="card-container">
   {% for ls in Ls %}
-  <p>{{ ls.id }}: {{ ls.first_name }} {{ ls.last_name }}</p>
+ 
   <a href="{% url 'Ins_Schedule' idNum=ls.idNum %}">
       <div class="card">
         {% if ls.profile %}
