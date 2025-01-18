@@ -42,7 +42,7 @@
         <tr>
           <td>{{ schedule.subject }}</td>
           <td>{{ schedule.section }}</td>
-          <td>{{ schedule.days }}</td>
+          <td>{{ schedule.days }}</td>  <!-- Display the concatenated string of days -->
           <td>{{ schedule.time|date:"h:i A" }} - {{ schedule.end_time|date:"h:i A" }}</td>
           <td>{{ schedule.room }}</td>
           <td>

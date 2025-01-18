@@ -233,9 +233,9 @@ class Ins_Schedule(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, to_field='idNum')
     subject = models.CharField(max_length=100)
     section = models.CharField(max_length=50)
-    days = models.CharField(max_length=10)
+    days = models.CharField(max_length=20)  # Ensure this is a CharField
     time = models.TimeField()
-    end_time = models.TimeField()  # Ensure this field is correctly defined
+    end_time = models.TimeField()
     room = models.CharField(max_length=50)
 
     def __str__(self):

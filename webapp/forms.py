@@ -64,6 +64,18 @@ class UserDataForm(forms.ModelForm):
         fields = '__all__'  # List the fields you want to include in the form
 
 class ScheduleForm(forms.ModelForm):
+    DAYS_CHOICES = [
+        ('M', 'Monday'),
+        ('T', 'Tuesday'),
+        ('W', 'Wednesday'),
+        ('TH', 'Thursday'),
+        ('F', 'Friday'),
+        ('S', 'Saturday'),
+        ('SU', 'Sunday'),
+    ]
+
+    days = forms.MultipleChoiceField(choices=DAYS_CHOICES, widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model = Ins_Schedule
         fields = ['subject', 'section', 'days', 'time', 'end_time', 'room']
@@ -71,6 +83,10 @@ class ScheduleForm(forms.ModelForm):
             'time': forms.TimeInput(attrs={'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+    def clean_days(self):
+        days = self.cleaned_data.get('days')
+        return ''.join(days)  # Convert list of days to a concatenated string
 
     def clean_time(self):
         time = self.cleaned_data.get('time')
