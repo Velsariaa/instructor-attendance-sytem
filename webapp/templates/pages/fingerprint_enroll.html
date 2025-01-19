@@ -103,12 +103,13 @@
         // Set enrollment mode when page loads
         $(document).ready(function() {
             $.ajax({
-                url: 'http://localhost:8000/fingerprint/mode',
+                url: '/fingerprint/mode',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ mode: 'enroll' }),
                 success: function() {
                     startEnrollmentProcess();
+                    pollEnrollmentStatus();
                 }
             });
         });
@@ -118,57 +119,56 @@
             $('#mainFingerprint').addClass('active');
         }
 
-        // Listen for POST requests from the fingerprint module
-        function handleEnrollmentUpdate(data) {
-            if (data.main) {
-                $('#mainFingerprint').removeClass('active').addClass('success');
-                $('#backupFingerprint').addClass('active');
-                $('#statusMessage').html('Main finger enrolled. Please place your backup finger.').addClass('success-message');
-            }
-            
-            if (data.backup) {
-                $('#backupFingerprint').removeClass('active').addClass('success');
-                $('#statusMessage').html('Enrollment complete! Redirecting...').addClass('success-message');
-                enrollmentComplete = true;
-                
-                // Set mode back to verify
-                $.ajax({
-                    url: 'http://localhost:8000/fingerprint/mode',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ mode: 'verify' }),
-                    success: function() {
-                        // Redirect to home page after 2 seconds
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 2000);
-                    }
-                });
-            }
+        function pollEnrollmentStatus() {
+            if (enrollmentComplete) return;
 
-            if (data.error) {
-                handleEnrollmentError(data.error);
-            }
+            $.get('/fingerprint/enrollment_status', function(data) {
+                handleEnrollmentStatus(data);
+                
+                if (!enrollmentComplete) {
+                    setTimeout(pollEnrollmentStatus, 1000);
+                }
+            });
         }
 
-        function handleEnrollmentError(error) {
-            if (error.includes('main')) {
-                $('#mainFingerprint').removeClass('active').addClass('error');
-                $('#statusMessage').html('Error with main finger. Please try again.').addClass('error-message');
-            } else if (error.includes('backup')) {
-                $('#backupFingerprint').removeClass('active').addClass('error');
-                $('#statusMessage').html('Error with backup finger. Please try again.').addClass('error-message');
-            }
-            
-            // Reset after 2 seconds
-            setTimeout(() => {
-                $('.fingerprint').removeClass('error');
-                if (!$('#mainFingerprint').hasClass('success')) {
-                    $('#mainFingerprint').addClass('active');
-                } else {
+        function handleEnrollmentStatus(data) {
+            const { status, message, finger } = data;
+            $('#statusMessage').html(message);
+
+            if (finger === 'main') {
+                if (status === 'success') {
+                    $('#mainFingerprint').removeClass('active error').addClass('success');
                     $('#backupFingerprint').addClass('active');
+                } else if (status === 'fail') {
+                    $('#mainFingerprint').removeClass('active success').addClass('error');
+                    setTimeout(() => {
+                        $('#mainFingerprint').removeClass('error').addClass('active');
+                    }, 2000);
                 }
-            }, 2000);
+            } else if (finger === 'backup') {
+                if (status === 'success') {
+                    $('#backupFingerprint').removeClass('active error').addClass('success');
+                    enrollmentComplete = true;
+                    
+                    // Switch back to verify mode
+                    $.ajax({
+                        url: '/fingerprint/mode',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ mode: 'verify' }),
+                        success: function() {
+                            setTimeout(() => {
+                                window.location.href = '/';
+                            }, 2000);
+                        }
+                    });
+                } else if (status === 'fail') {
+                    $('#backupFingerprint').removeClass('active success').addClass('error');
+                    setTimeout(() => {
+                        $('#backupFingerprint').removeClass('error').addClass('active');
+                    }, 2000);
+                }
+            }
         }
     </script>
 </body>

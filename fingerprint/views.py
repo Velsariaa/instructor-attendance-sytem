@@ -80,4 +80,26 @@ def delete_all(request):
         return Response({'delete_all': should_delete})
 
 
+@api_view(['GET', 'POST'])
+def enrollment_status(request):
+    cache_key = 'fingerprint_enrollment_status'
+    
+    if request.method == 'POST':
+        status_data = {
+            'status': request.data.get('status', 'idle'),  # idle/success/fail
+            'message': request.data.get('message', ''),
+            'finger': request.data.get('finger', 'main')  # main/backup
+        }
+        cache.set(cache_key, status_data, timeout=None)
+        return Response({'status': 'success'})
+        
+    if request.method == 'GET':
+        status_data = cache.get(cache_key, {
+            'status': 'idle',
+            'message': 'Waiting for finger placement...',
+            'finger': 'main'
+        })
+        return Response(status_data)
+
+
 
