@@ -3,9 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Fingerprint Control Panel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .control-panel {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .inactive {
+            background-color: #f44336;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <div class="control-panel">
+        <h1>Fingerprint Control Panel</h1>
+        
+        <div class="button-group">
+            <h2>Sensor Status</h2>
+            <div id="activeStatus" class="status">Checking status...</div>
+            <button onclick="toggleActive(true)">Activate</button>
+            <button onclick="toggleActive(false)">Deactivate</button>
+        </div>
+
+        <div class="button-group">
+            <h2>Sensor Mode</h2>
+            <div id="modeStatus" class="status">Checking mode...</div>
+            <button onclick="setMode('enroll')">Set Enroll Mode</button>
+            <button onclick="setMode('verify')">Set Verify Mode</button>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            $.get('/fingerprint/is_active', function(data) {
+                $('#activeStatus').text(data.is_active ? 'Active' : 'Inactive')
+                    .removeClass('active inactive')
+                    .addClass(data.is_active ? 'active' : 'inactive');
+            });
+        }
+
+        function updateMode() {
+            $.get('/fingerprint/mode', function(data) {
+                $('#modeStatus').text('Mode: ' + data.mode.toUpperCase())
+                    .removeClass('active inactive')
+                    .addClass(data.mode === 'verify' ? 'active' : 'inactive');
+            });
+        }
+
+        function toggleActive(state) {
+            $.ajax({
+                url: '/fingerprint/is_active',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ is_active: state }),
+                success: function(response) {
+                    updateStatus();
+                }
+            });
+        }
+
+        function setMode(mode) {
+            $.ajax({
+                url: '/fingerprint/mode',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ mode: mode }),
+                success: function(response) {
+                    updateMode();
+                }
+            });
+        }
+
+        // Update status and mode every 2 seconds
+        setInterval(function() {
+            updateStatus();
+            updateMode();
+        }, 2000);
+
+        // Initial update
+        updateStatus();
+        updateMode();
+    </script>
 </body>
 </html>

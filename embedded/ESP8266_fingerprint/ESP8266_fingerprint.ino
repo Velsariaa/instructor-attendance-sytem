@@ -12,7 +12,7 @@
 #define MODE_DELETE_ALL 4
 
 
-const char* server_url = "http://192.168.165.248:8000";
+const char* server_url = "http://192.168.86.248:8000";
 const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
@@ -155,13 +155,13 @@ bool checkIfActive() {
 int getFingerprintIDez() {
   uint8_t p = finger.getImage();
   if (p != 2) {
-    Serial.println(p);
+    //Serial.println(p);
   }
   if (p != FINGERPRINT_OK) return -1;
   
   p = finger.image2Tz();
   if (p != 2) {
-    Serial.println(p);
+    //Serial.println(p);
   }
   if (p != FINGERPRINT_OK) return -1;
 
@@ -307,7 +307,7 @@ bool postVerifyMode() {
   if (httpResponseCode > 0) {
     String response = http.getString();
     Serial.println("HTTP Response code: " + String(httpResponseCode));
-    Serial.println("Response: " + response);
+    //Serial.println("Response: " + response);
     return true;
   } else {
     Serial.print("Error code: ");
@@ -331,7 +331,7 @@ bool postFingerprintData(String jsonData) {
   if (httpResponseCode > 0) {
     String response = http.getString();
     Serial.println("HTTP Response code: " + String(httpResponseCode));
-    Serial.println("Response: " + response);
+    //Serial.println("Response: " + response);
     http.end();
     return true;
   } else {
@@ -369,7 +369,7 @@ bool postVerificationResult(String jsonData) {
   if (httpResponseCode > 0) {
     String response = http.getString();
     Serial.println("HTTP Response code: " + String(httpResponseCode));
-    Serial.println("Response: " + response);
+    //Serial.println("Response: " + response);
     http.end();
     return true;
   } else {
@@ -401,8 +401,6 @@ bool checkMode() {
       return true;
     }
   }
-
-  Serial.println(httpResponseCode);
   
   http.end();
   return false;
