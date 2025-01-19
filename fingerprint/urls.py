@@ -7,4 +7,5 @@ urlpatterns = [
     path('is_active', views.is_active, name='is_active'),
     path('enroll', views.enroll, name='enroll'),
     path('verify', views.verify, name='verify'),
+    path('delete_all', views.delete_all, name='delete_all'),
 ]

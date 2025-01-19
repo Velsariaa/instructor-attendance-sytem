@@ -9,7 +9,7 @@ from rest_framework import status
 
 
 def index(request):
-    return render(request, 'pages/test.html')
+    return render(request, 'pages/fingerprint_control.html')
 
 
 @api_view(['GET', 'POST'])
@@ -61,6 +61,23 @@ def verify(request):
         match_id = JSONParser().parse(request)
         print(match_id)
     return render(request, 'pages/test.html')
+
+
+@api_view(['GET', 'POST'])
+def delete_all(request):
+    cache_key = 'fingerprint_delete_all'
+    
+    if request.method == 'POST':
+        delete_state = request.data.get('delete_all', False)
+        cache.set(cache_key, delete_state, timeout=None)  # Store indefinitely
+        return Response({'status': 'success', 'delete_all': delete_state})
+        
+    if request.method == 'GET':
+        should_delete = cache.get(cache_key, False)  # Default to False if not set
+        # Reset the delete flag after it's been read
+        if should_delete:
+            cache.set(cache_key, False, timeout=None)
+        return Response({'delete_all': should_delete})
 
 
 

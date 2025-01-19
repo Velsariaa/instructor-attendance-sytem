@@ -17,6 +17,7 @@ const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
 const char* verify_api = "/fingerprint/verify";
+const char* delete_all_api = "/fingerprint/delete_all";
 
 const char* ssid = "test";      
 const char* password = "88888888"; 
@@ -73,7 +74,6 @@ void setup()
 
 
 void loop() {
-
   if (!checkIfActive()) {
     delay(1000);  
     return;
@@ -84,10 +84,12 @@ void loop() {
     return;
   }
 
+  checkDeleteCommand();
+
   if (mode == MODE_ENROLL) {
     getFingerprintEnroll();
-    // After enrollment, automatically switch back to verify mode
     mode = MODE_VERIFY;
+    
   } else if (mode == MODE_VERIFY) {
     finger_status = getFingerprintIDez();
     if (finger_status != -1 && finger_status != -2) {
@@ -469,4 +471,26 @@ bool deleteAllFingerprints() {
   }
   
   return true;
+}
+
+void checkDeleteCommand() {
+    WiFiClient client;
+    HTTPClient http;
+    
+    String url = String(server_url) + String(delete_all_api);
+    
+    http.begin(client, url);
+    int httpResponseCode = http.GET();
+    
+    if (httpResponseCode > 0) {
+        String response = http.getString();
+        if (response.indexOf("true") > -1) {
+            if (deleteAllFingerprints()) {
+                Serial.println("All fingerprints deleted successfully");
+            } else {
+                Serial.println("Error deleting fingerprints");
+            }
+        }
+    }
+    http.end();
 }
