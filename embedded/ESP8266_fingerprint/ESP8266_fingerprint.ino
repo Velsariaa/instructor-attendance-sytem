@@ -17,6 +17,7 @@ const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
 const char* verify_api = "/fingerprint/verify";
+const char* delete_all_api = "/fingerprint/delete_all";
 
 const char* ssid = "test";      
 const char* password = "88888888"; 
@@ -73,7 +74,6 @@ void setup()
 
 
 void loop() {
-
   if (!checkIfActive()) {
     delay(1000);  
     return;
@@ -84,10 +84,12 @@ void loop() {
     return;
   }
 
+  checkDeleteCommand();
+
   if (mode == MODE_ENROLL) {
     getFingerprintEnroll();
-    // After enrollment, automatically switch back to verify mode
     mode = MODE_VERIFY;
+    
   } else if (mode == MODE_VERIFY) {
     finger_status = getFingerprintIDez();
     if (finger_status != -1 && finger_status != -2) {
@@ -193,105 +195,243 @@ uint8_t getNextAvailableId() {
   return 0; 
 }
 
-uint8_t getFingerprintEnroll() {
-  int p = -1;
-  String jsonResponse = "{";
-  const char* fingerNames[2] = {"main", "backup"};
-  
-
-  id = getNextAvailableId();
-  if (id == 0) {
-    Serial.println("No free slot available!");
-    return FINGERPRINT_NOFINGER;
-  }
-  
-  for (int i = 0; i < 2; i++) {
-
-    Serial.println("Remove finger");
-    delay(2000);
-    bool enrolled = false;
-    Serial.print("Enrolling ");
-    Serial.print(fingerNames[i]);
-    Serial.print(" with ID #");
-    Serial.println(id);
+void sendEnrollmentStatus(String status, String message, String finger) {
+    WiFiClient client;
+    HTTPClient http;
     
-    while (!enrolled) {
-      p = finger.getImage();
-      switch (p) {
-        case FINGERPRINT_OK:
-          Serial.println("Image taken");
-          break;
-        case FINGERPRINT_NOFINGER:
-          continue; 
-        case FINGERPRINT_PACKETRECIEVEERR:
-          Serial.println("Communication error");
-          continue; 
-        case FINGERPRINT_IMAGEFAIL:
-          Serial.println("Imaging error, please try again.");
-          continue; 
-        default:
-          Serial.println("Unknown error");
-          continue; 
-      }
-
-      p = finger.image2Tz(1);
-      if (p != FINGERPRINT_OK) {
-        Serial.println("Conversion error, please try again.");
-        continue; 
-      }
-
-      Serial.println("Remove finger");
-      delay(2000);
-      p = 0;
-      while (p != FINGERPRINT_NOFINGER) {
-        p = finger.getImage();
-      }
-
-      p = -1;
-      Serial.println("Place same finger again");
-      while (p != FINGERPRINT_OK) {
-        p = finger.getImage();
-      }
-
-      p = finger.image2Tz(2);
-      if (p != FINGERPRINT_OK) {
-        Serial.println("Conversion error, please try again.");
-        continue; 
-      }
-
-      p = finger.createModel();
-      if (p != FINGERPRINT_OK) {
-        Serial.println("Model error, please try again.");
-        continue; 
-      }
-
-      uint8_t currentId = id;  
-      p = finger.storeModel(currentId);
-      if (p == FINGERPRINT_OK) {
-        Serial.print("Stored ");
-        Serial.println(fingerNames[i]);
-        jsonResponse += "\"" + String(fingerNames[i]) + "\": " + String(currentId);
-        if (i < 1) jsonResponse += ", ";
-        enrolled = true;
-        id++; 
-      }
-    }
-  }
-
-  jsonResponse += "}";
-  Serial.println("Enrollment complete. JSON response: " + jsonResponse);
-  
-  if (postFingerprintData(jsonResponse)) {
-    Serial.println("Successfully sent to server");
-  } else {
-    Serial.println("Failed to send to server");
-  }
-
-  postVerifyMode();
-  
-  return FINGERPRINT_OK;
+    String url = String(server_url) + "/fingerprint/enrollment_status";
+    String jsonData = "{\"status\": \"" + status + "\", \"message\": \"" + message + "\", \"finger\": \"" + finger + "\"}";
+    
+    http.begin(client, url);
+    http.addHeader("Content-Type", "application/json");
+    
+    int httpResponseCode = http.POST(jsonData);
+    Serial.println("Enrollment status: " + status + " - " + message + " (" + finger + ")");
+    http.end();
 }
 
+uint8_t getFingerprintEnroll() {
+    int p = -1;
+    uint8_t mainId = 0;  // Declare mainId
+    uint8_t backupId = 0; // Declare backupId
+
+    id = getNextAvailableId();
+    if (id == 0) {
+      Serial.println("No free slot available!");
+      return FINGERPRINT_NOFINGER;
+    }
+    
+    // Enroll main finger
+    Serial.println("\nReady to enroll main finger!");
+    sendEnrollmentStatus("idle", "Place main finger on sensor", "main");
+    
+    bool mainEnrolled = false;
+    
+    while (!mainEnrolled) {
+        p = finger.getImage();
+        switch (p) {
+            case FINGERPRINT_OK:
+                Serial.println("Image taken");
+                sendEnrollmentStatus("idle", "Image taken", "main");
+                break;
+            case FINGERPRINT_NOFINGER:
+                Serial.println(".");
+                continue;
+            case FINGERPRINT_PACKETRECIEVEERR:
+                Serial.println("Communication error");
+                sendEnrollmentStatus("fail", "Communication error", "main");
+                continue;
+            case FINGERPRINT_IMAGEFAIL:
+                Serial.println("Imaging error");
+                sendEnrollmentStatus("fail", "Imaging error", "main");
+                continue;
+            default:
+                Serial.println("Unknown error");
+                sendEnrollmentStatus("fail", "Unknown error", "main");
+                continue;
+        }
+
+        p = finger.image2Tz(1);
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Conversion error");
+            sendEnrollmentStatus("fail", "Conversion error, please try again.", "main");
+            continue;
+        }
+
+        Serial.println("Remove finger");
+        sendEnrollmentStatus("idle", "Remove finger", "main");
+        delay(2000);
+        p = 0;
+        while (p != FINGERPRINT_NOFINGER) {
+            p = finger.getImage();
+        }
+
+        p = -1;
+        Serial.println("Place same finger again");
+        sendEnrollmentStatus("idle", "Place same finger again", "main");
+        while (p != FINGERPRINT_OK) {
+            p = finger.getImage();
+        }
+
+        p = finger.image2Tz(2);
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Conversion error");
+            sendEnrollmentStatus("fail", "Conversion error, please try again.", "main");
+            continue;
+        }
+
+        p = finger.createModel();
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Model error");
+            sendEnrollmentStatus("fail", "Model error, please try again.", "main");
+            continue;
+        }
+
+        mainId = id++; // Assign mainId
+        p = finger.storeModel(mainId);
+        if (p == FINGERPRINT_OK) {
+            Serial.println("Stored main finger successfully!");
+            sendEnrollmentStatus("success", "Main finger enrolled successfully", "main");
+            mainEnrolled = true;
+        } else {
+            Serial.println("Failed to store main finger");
+            sendEnrollmentStatus("fail", "Failed to store main finger", "main");
+        }
+    }
+
+    // Enroll backup finger
+    Serial.println("\nReady to enroll backup finger!");
+    sendEnrollmentStatus("idle", "Place backup finger on sensor", "backup");
+    
+    bool backupEnrolled = false;
+    
+    while (!backupEnrolled) {
+        p = finger.getImage();
+        switch (p) {
+            case FINGERPRINT_OK:
+                Serial.println("Image taken");
+                sendEnrollmentStatus("idle", "Image taken", "backup");
+                break;
+            case FINGERPRINT_NOFINGER:
+                Serial.println(".");
+                continue;
+            case FINGERPRINT_PACKETRECIEVEERR:
+                Serial.println("Communication error");
+                sendEnrollmentStatus("fail", "Communication error", "backup");
+                continue;
+            case FINGERPRINT_IMAGEFAIL:
+                Serial.println("Imaging error");
+                sendEnrollmentStatus("fail", "Imaging error, please try again.", "backup");
+                continue;
+            default:
+                Serial.println("Unknown error");
+                sendEnrollmentStatus("fail", "Unknown error", "backup");
+                continue;
+        }
+
+        p = finger.image2Tz(1);
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Conversion error");
+            sendEnrollmentStatus("fail", "Conversion error, please try again.", "backup");
+            continue;
+        }
+
+        Serial.println("Remove finger");
+        sendEnrollmentStatus("idle", "Remove finger", "backup");
+        delay(2000);
+        p = 0;
+        while (p != FINGERPRINT_NOFINGER) {
+            p = finger.getImage();
+        }
+
+        p = -1;
+        Serial.println("Place same finger again");
+        sendEnrollmentStatus("idle", "Place same finger again", "backup");
+        while (p != FINGERPRINT_OK) {
+            p = finger.getImage();
+        }
+
+        p = finger.image2Tz(2);
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Conversion error");
+            sendEnrollmentStatus("fail", "Conversion error, please try again.", "backup");
+            continue;
+        }
+
+        p = finger.createModel();
+        if (p != FINGERPRINT_OK) {
+            Serial.println("Model error");
+            sendEnrollmentStatus("fail", "Model error, please try again.", "backup");
+            continue;
+        }
+
+        backupId = id++; // Assign backupId
+        p = finger.storeModel(backupId);
+        if (p == FINGERPRINT_OK) {
+            Serial.println("Stored backup finger successfully!");
+            sendEnrollmentStatus("success", "Backup finger enrolled successfully", "backup");
+            backupEnrolled = true;
+        } else {
+            Serial.println("Failed to store backup finger");
+            sendEnrollmentStatus("fail", "Failed to store backup finger", "backup");
+        }
+    }
+
+    Serial.println("Enrollment complete!");
+    
+    // Create and send final JSON response
+    String jsonResponse = "{\"main\": " + String(mainId) + ", \"backup\": " + String(backupId) + "}";
+    Serial.println("Enrollment complete. JSON response: " + jsonResponse);
+    
+    if (sendPostRequest(jsonResponse)) {
+        Serial.println("Successfully sent to server");
+        
+        // Switch back to verify mode
+        WiFiClient client;
+        HTTPClient http;
+        String url = String(server_url) + String(mode_api);
+        String modeData = "{\"mode\": \"verify\"}";
+        
+        http.begin(client, url);
+        http.addHeader("Content-Type", "application/json");
+        
+        int httpResponseCode = http.POST(modeData);
+        if (httpResponseCode > 0) {
+            Serial.println("Successfully switched to verify mode");
+            mode = MODE_VERIFY;
+        }
+        http.end();
+    }
+    
+    return FINGERPRINT_OK;
+}
+
+bool sendPostRequest(String jsonData) {
+  WiFiClient client;
+  HTTPClient http;
+  
+  String url = String(server_url) + String(enroll_api);
+  
+  http.begin(client, url);
+  http.addHeader("Content-Type", "application/json");
+  
+  int httpResponseCode = http.POST(jsonData);
+  
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    Serial.println("HTTP Response code: " + String(httpResponseCode));
+    Serial.println("Response: " + response);
+    http.end();
+    return true;
+  } else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+    http.end();
+    return false;
+  }
+}
+
+// Must be used at the end of getFingerprintEnroll
 bool postVerifyMode() {
   WiFiClient client;
   HTTPClient http;
@@ -315,44 +455,6 @@ bool postVerifyMode() {
      return false;
   }
   http.end();
-}
-
-bool postFingerprintData(String jsonData) {
-  WiFiClient client;
-  HTTPClient http;
-  
-  String url = String(server_url) + String(enroll_api);
-  
-  http.begin(client, url);
-  http.addHeader("Content-Type", "application/json");
-  
-  int httpResponseCode = http.POST(jsonData);
-  
-  if (httpResponseCode > 0) {
-    String response = http.getString();
-    Serial.println("HTTP Response code: " + String(httpResponseCode));
-    //Serial.println("Response: " + response);
-    http.end();
-    return true;
-  } else {
-    Serial.print("Error code: ");
-    Serial.println(httpResponseCode);
-    http.end();
-    return false;
-  }
-}
-
-bool deleteAllFingerprints() {
-  Serial.println("Deleting all fingerprint templates...");
-  
-  for (int i = 1; i <= 127; i++) {
-    if (finger.deleteModel(i) == FINGERPRINT_OK) {
-      Serial.print("Deleted ID #");
-      Serial.println(i);
-    }
-  }
-  
-  return true;
 }
 
 bool postVerificationResult(String jsonData) {
@@ -404,4 +506,39 @@ bool checkMode() {
   
   http.end();
   return false;
+}
+
+bool deleteAllFingerprints() {
+  Serial.println("Deleting all fingerprint templates...");
+  
+  for (int i = 1; i <= 127; i++) {
+    if (finger.deleteModel(i) == FINGERPRINT_OK) {
+      Serial.print("Deleted ID #");
+      Serial.println(i);
+    }
+  }
+  
+  return true;
+}
+
+void checkDeleteCommand() {
+    WiFiClient client;
+    HTTPClient http;
+    
+    String url = String(server_url) + String(delete_all_api);
+    
+    http.begin(client, url);
+    int httpResponseCode = http.GET();
+    
+    if (httpResponseCode > 0) {
+        String response = http.getString();
+        if (response.indexOf("true") > -1) {
+            if (deleteAllFingerprints()) {
+                Serial.println("All fingerprints deleted successfully");
+            } else {
+                Serial.println("Error deleting fingerprints");
+            }
+        }
+    }
+    http.end();
 }
