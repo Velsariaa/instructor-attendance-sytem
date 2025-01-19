@@ -43,9 +43,17 @@ def mode(request):
 @api_view(['POST'])
 def enroll(request):
     if request.method == 'POST':
-        fingerprint_templates = JSONParser().parse(request)
-        print(fingerprint_templates)
-    return render(request, 'pages/test.html')
+        fingerprint_data = JSONParser().parse(request)
+        print("Received fingerprint data:", fingerprint_data)
+        
+        response_data = {
+            'success': True,
+            'main': fingerprint_data.get('main'),
+            'backup': fingerprint_data.get('backup')
+        }
+        
+        return JsonResponse(response_data)
+    return JsonResponse({'error': 'Invalid request method'})
  
 @api_view(['POST'])
 def verify(request):

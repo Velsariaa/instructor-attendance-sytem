@@ -483,3 +483,7 @@ def delete_schedule(request, schedule_id):
     employee_id = schedule.employee.idNum
     schedule.delete()
     return redirect('Ins_Schedule', idNum=employee_id)
+
+
+def fingerprint_enroll(request):
+    return render(request, 'pages/fingerprint_enroll.html')
