@@ -47,7 +47,7 @@ class Attendance(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     ]
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    #gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     date = models.DateField(null=True, blank=True)
     time_in = models.TimeField(null=True, blank=True, default=timezone.now)
     time_out = models.TimeField(null=True, blank=True, default=timezone.now)

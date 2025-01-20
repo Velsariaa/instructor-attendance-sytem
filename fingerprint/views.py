@@ -6,7 +6,8 @@ from django.core.cache import cache
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
-from webapp import models
+from webapp .models import Attendance
+from django.utils import timezone # type: ignore
 
 
 def index(request):
@@ -61,6 +62,20 @@ def verify(request):
     if request.method == 'POST':
         match_id = JSONParser().parse(request)
         print(match_id)
+        
+        attendance = Attendance(
+            first_name="test",
+            middle_name="test",
+            last_name="test",
+            username="test",
+            email="test",
+            address="test",
+            date=timezone.now().date(),
+            time_in=timezone.now().time(),
+            status="test"
+        )
+        attendance.save()
+        
     return render(request, 'pages/test.html')
 
 
