@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Control Panel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .control-panel {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .inactive {
+            background-color: #f44336;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .danger-button {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .danger-button:hover {
+            background-color: #c82333;
+        }
+        
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h1>Fingerprint Control Panel</h1>
+        
+        <div class="button-group">
+            <h2>Sensor Status</h2>
+            <div id="activeStatus" class="status">Checking status...</div>
+            <button onclick="toggleActive(true)">Activate</button>
+            <button onclick="toggleActive(false)">Deactivate</button>
+        </div>
+
+        <div class="button-group">
+            <h2>Sensor Mode</h2>
+            <div id="modeStatus" class="status">Checking mode...</div>
+            <button onclick="setMode('enroll')">Set Enroll Mode</button>
+            <button onclick="setMode('verify')">Set Verify Mode</button>
+        </div>
+
+        <div class="button-group">
+            <h2>Danger Zone</h2>
+            <button onclick="deleteAllTemplates()" class="danger-button">Delete All Templates</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="confirm-dialog" id="confirmDialog">
+        <h3>Delete All Templates</h3>
+        <p>Are you sure you want to delete all fingerprint templates? This action cannot be undone.</p>
+        <button onclick="confirmDelete()" class="danger-button">Delete All</button>
+        <button onclick="cancelDelete()">Cancel</button>
+    </div>
+
+    <script>
+        function updateStatus() {
+            $.get('/fingerprint/is_active', function(data) {
+                $('#activeStatus').text(data.is_active ? 'Active' : 'Inactive')
+                    .removeClass('active inactive')
+                    .addClass(data.is_active ? 'active' : 'inactive');
+            });
+        }
+
+        function updateMode() {
+            $.get('/fingerprint/mode', function(data) {
+                $('#modeStatus').text('Mode: ' + data.mode.toUpperCase())
+                    .removeClass('active inactive')
+                    .addClass(data.mode === 'verify' ? 'active' : 'inactive');
+            });
+        }
+
+        function toggleActive(state) {
+            $.ajax({
+                url: '/fingerprint/is_active',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ is_active: state }),
+                success: function(response) {
+                    updateStatus();
+                }
+            });
+        }
+
+        function setMode(mode) {
+            $.ajax({
+                url: '/fingerprint/mode',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ mode: mode }),
+                success: function(response) {
+                    updateMode();
+                }
+            });
+        }
+
+        function deleteAllTemplates() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('confirmDialog').style.display = 'block';
+        }
+        
+        function confirmDelete() {
+            $.ajax({
+                url: '/fingerprint/delete_all',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ delete_all: true }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Delete command sent successfully');
+                    } else {
+                        alert('Error sending delete command');
+                    }
+                    cancelDelete();
+                },
+                error: function(error) {
+                    alert('Error sending delete command');
+                    cancelDelete();
+                }
+            });
+        }
+        
+        function cancelDelete() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('confirmDialog').style.display = 'none';
+        }
+
+        // Update status and mode every 2 seconds
+        setInterval(function() {
+            updateStatus();
+            updateMode();
+        }, 2000);
+
+        // Initial update
+        updateStatus();
+        updateMode();
+    </script>
+</body>
+</html>
