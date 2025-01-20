@@ -69,6 +69,7 @@ def attendance_page(request):
     Tr = TimeRecord.objects.all()
     sd = Schedule.objects.all()
     
+    
     # Fetch all availability statuses
     availability_data = {
         availability.name: availability.status

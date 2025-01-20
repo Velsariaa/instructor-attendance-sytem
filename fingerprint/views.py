@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
+from webapp import models
 
 
 def index(request):
