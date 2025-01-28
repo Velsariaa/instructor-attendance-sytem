@@ -12,7 +12,7 @@
 #define MODE_DELETE_ALL 4
 
 
-const char* server_url = "http://192.168.86.248:8000";
+const char* server_url = "http://192.168.9.248:8000";
 const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
