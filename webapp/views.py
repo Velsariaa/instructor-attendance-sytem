@@ -487,4 +487,11 @@ def delete_schedule(request, schedule_id):
 
 
 def fingerprint_enroll(request):
-    return render(request, 'pages/fingerprint_enroll.html')
+    if request.method == 'POST':
+        form = ListofstaffForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('main') 
+    else:
+        form = ListofstaffForm()
+    return render(request, 'pages/fingerprint_enroll.html', {'form': form})

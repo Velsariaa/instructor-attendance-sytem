@@ -1,11 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fingerprint Enrollment</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        .sidebar {
+      width: 200px;
+      height: 100vh;
+      position: fixed;
+      background:#508D4E;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      padding-top: 20px;
+      margin-top: -20px;
+  }
+  .form-box {
+    background-color: white; 
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    max-width: 1000px;
+    width: 1000px;
+    margin: auto;
+    margin-left: 150px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  input#birthday{
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border-color: rgb(192, 189, 189);
+  }
+  input#birthday:hover{
+    border-color: #4CAF50;
+    border-top-color: #4CAF50;
+  }
+  input{
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border-color: rgb(192, 189, 189);
+  }
+  .form-group input[type="file"]:hover{
+    border-color: #4CAF50;
+    border-top-color: #4CAF50;
+  }
+  select {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border-color: rgb(192, 189, 189);
+  }
+  select:hover, input[type="text"]:hover {
+    border-color: #4CAF50;
+   
+  }
+  .form-group {
+    flex: 1;
+    margin-right: 10px;
+  }
+  .form-group:last-child {
+    margin-right: 0;
+  }
+  .column {
+    flex: 1;
+  }
+  button[type="submit"]{
+    background-color: #4CAF50;
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer;
+  }
+  button[type="submit"]:hover{
+    background-color: #69e86d;
+    color: black;
+  }
         .enrollment-panel {
             max-width: 800px;
             margin: 50px auto;
@@ -65,45 +145,157 @@
         }
     </style>
 </head>
-<body>
-    <div class="enrollment-panel">
-        <h1>Fingerprint Enrollment</h1>
-        <p>Please follow the instructions to enroll your fingerprints</p>
-        
-        <div class="fingerprint-container">
-            <div class="fingerprint-section">
-                <div id="mainFingerprint" class="fingerprint">
-                    <svg viewBox="0 0 100 100" width="100" height="100">
-                        <!-- Simple fingerprint icon -->
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <path d="M50 20 Q50 80 50 80" stroke="currentColor" fill="none"/>
-                    </svg>
-                </div>
-                <div class="fingerprint-label">Main Finger</div>
+<body class="AddEmpBody">
+    <section id="AddEmployee">
+        <!--SIDEBAR-->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="{% static 'image/logoams.png' %}" height="50px" width="50px" alt="CVSU logo">
+                <h5>AMSUFB</h5>
             </div>
-            
-            <div class="fingerprint-section">
-                <div id="backupFingerprint" class="fingerprint">
-                    <svg viewBox="0 0 100 100" width="100" height="100">
-                        <!-- Simple fingerprint icon -->
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <path d="M50 20 Q50 80 50 80" stroke="currentColor" fill="none"/>
-                    </svg>
-                </div>
-                <div class="fingerprint-label">Backup Finger</div>
-            </div>
+            <br>
+            <br>
+            <a href="{% url 'Apost' %}" {% if request.resolver_match.url_name == 'Apost' %}class="active"{% endif %}>News</a>
+            <a href="{% url 'main' %}" {% if request.path == '/main/' %}class="active"{% endif %}>Instructor</a>
+            <a href="{% url 'attendance' %}" {% if request.path == '/attendance/' %}class="active"{% endif %}>Attendance</a>
+            <a href="{% url 'schedule' %}" {% if request.path == '/schedule/' %}class="active"{% endif %}>Schedule</a>
+            <a href="{% url 'dtrm' %}" {% if request.path == '/dtrm/' %}class="active"{% endif %}>DTR</a>
+            <a href="{% url 'Acomlab' %}" {% if request.path == '/Acomlab/' %}class="active"{% endif %}>Comlab</a>
+            <a href="{% url 'Logout' %}" {% if request.path == '/Logout/' %}class="active"{% endif %}>Log out</a>
         </div>
-        
-        <div id="statusMessage" class="status-message"></div>
+    </section>
+
+
+    <!--CONTENTS-->
+    <div class="container" style="margin-top: 20px;">
+        <div class="form-box">
+            <h1>Employee</h1>
+            <form method="post" class="staff-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="idNum">ID:</label>
+                            <input type="text" id="idNum" name="idNum" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name">First Name:</label>
+                            <input type="text" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input type="text" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle_name">Middle Name:</label>
+                            <input type="text" id="middle_name" name="middle_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday">Birthday:</label>
+                            <input type="date" id="birthday" name="birthday" required>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="text" id="age" name="age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select id="gender" name="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status:</label>
+                            <select id="status" name="status" required>
+                                <option value="Full time">Full time</option>
+                                <option value="Part time">Part time</option>
+                                <option value="Permanent">Permanent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Position:</label>
+                            <select id="position" name="position" required>
+                                <option value="Instructor 1">Instructor 1</option>
+                                <option value="Instructor 2">Instructor 2</option>
+                                <option value="Instructor 3">Instructor 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization">Organization:</label>
+                            <select id="organization" name="organization" required>
+                                <option value="Chairperson,DCS">Chairperson,DCS</option>
+                                <option value="Program Chair,CS">Program Chair,CS</option>
+                                <option value="Program Chair, IT">Program Chair, IT</option>
+                                <option value="Instructor">Instructor</option>
+                                <option value="Head, LMS">Head, LMS</option>
+                                <option value="Head, DCS RDE">Head, DCS RDE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profile">Profile Picture:</label>
+                    <input type="file" id="profile" name="profile" accept="image/*">
+                </div>
+
+                <!-- Added Fingerprint and Backup Fingerprint Inputs -->
+                <div class="form-group">
+                    <label for="fingerprint_id">Fingerprint:</label>
+                    <input type="text" id="fingerprint_id" name="fingerprint_id" required readonly>
+                </div>
+                <div class="form-group">
+                    <label for="backup_fingerprint_id">Backup Fingerprint:</label>
+                    <input type="text" id="backup_fingerprint_id" name="backup_fingerprint_id" required readonly>
+                </div>
+                <!-- End of Added Inputs -->
+
+                <div class="enrollment-panel">
+                    <h1>Fingerprint Enrollment</h1>
+                    <p>Please follow the instructions to enroll your fingerprints</p>
+                    
+                    <div class="fingerprint-container">
+                        <div class="fingerprint-section">
+                            <div id="mainFingerprint" class="fingerprint">
+                                <svg viewBox="0 0 100 100" width="100" height="100">
+                                    <!-- Simple fingerprint icon -->
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M50 20 Q50 80 50 80" stroke="currentColor" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="fingerprint-label">Main Finger</div>
+                        </div>
+                        
+                        <div class="fingerprint-section">
+                            <div id="backupFingerprint" class="fingerprint">
+                                <svg viewBox="0 0 100 100" width="100" height="100">
+                                    <!-- Simple fingerprint icon -->
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M50 20 Q50 80 50 80" stroke="currentColor" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="fingerprint-label">Backup Finger</div>
+                        </div>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Add</button>
+            </form>
+        </div>
     </div>
+
 
     <script>
         let enrollmentComplete = false;
 
-        // Set enrollment mode when page loads
         $(document).ready(function() {
             $.ajax({
-                url: 'http://192.168.225.248:8000/fingerprint/mode',
+                url: '/fingerprint/mode',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ mode: 'enroll' }),
@@ -117,12 +309,32 @@
         function startEnrollmentProcess() {
             $('#statusMessage').html('Please place your main finger on the sensor').addClass('success-message');
             $('#mainFingerprint').addClass('active');
+
+            // Enroll fingerprint and update text boxes in real-time
+            $.ajax({
+                url: '/fingerprint/enroll',
+                type: 'GET',
+                success: function(data) {
+                    $('#statusMessage').html('Fingerprint enrolled successfully').removeClass('success-message').addClass('success-message');
+                    $('#mainFingerprint').removeClass('active').addClass('success');
+                    $('#fingerprint_id').val(data.main);
+                    $('#backup_fingerprint_id').val(data.backup);
+                    // Restart the enrollment process to update text boxes continuously
+                    setTimeout(startEnrollmentProcess, 1000);
+                },
+                error: function(xhr, status, error) {
+                    $('#statusMessage').html('Failed to enroll fingerprint').removeClass('success-message').addClass('error-message');
+                    $('#mainFingerprint').removeClass('active').addClass('error');
+                    // Restart the enrollment process to update text boxes continuously
+                    setTimeout(startEnrollmentProcess, 1000);
+                }
+            });
         }
 
         function pollEnrollmentStatus() {
             if (enrollmentComplete) return;
 
-            $.get('http://192.168.225.248:8000/fingerprint/enrollment_status', function(data) {
+            $.get('/fingerprint/enrollment_status', function(data) {
                 handleEnrollmentStatus(data);
                 
                 if (!enrollmentComplete) {
@@ -149,19 +361,6 @@
                 if (status === 'success') {
                     $('#backupFingerprint').removeClass('active error').addClass('success');
                     enrollmentComplete = true;
-                    
-                    // Switch back to verify mode
-                    $.ajax({
-                        url: 'http://192.168.225.248:8000/fingerprint/mode',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ mode: 'verify' }),
-                        success: function() {
-                            setTimeout(() => {
-                                window.location.href = '/';
-                            }, 2000);
-                        }
-                    });
                 } else if (status === 'fail') {
                     $('#backupFingerprint').removeClass('active success').addClass('error');
                     setTimeout(() => {
@@ -172,4 +371,4 @@
         }
     </script>
 </body>
-</html>
+{% endblock %}

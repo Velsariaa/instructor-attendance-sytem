@@ -42,8 +42,10 @@ def mode(request):
         return Response({'mode': current_mode})
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def enroll(request):
+    cache_key = 'fingerprint_enrollment_data'
+    
     if request.method == 'POST':
         fingerprint_data = JSONParser().parse(request)
         print("Received fingerprint data:", fingerprint_data)
@@ -54,8 +56,14 @@ def enroll(request):
             'backup': fingerprint_data.get('backup')
         }
         
+        cache.set(cache_key, response_data, timeout=None)  
         return JsonResponse(response_data)
-    return JsonResponse({'error': 'Invalid request method'})
+    elif request.method == 'GET':
+      
+        response_data = cache.get(cache_key, {})
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
  
 @api_view(['POST'])
 def verify(request):

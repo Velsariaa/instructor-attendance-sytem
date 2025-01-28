@@ -107,7 +107,7 @@
 
     <script>
         function updateStatus() {
-            $.get('http://192.168.225.248:8000/fingerprint/is_active', function(data) {
+            $.get('/fingerprint/is_active', function(data) {
                 $('#activeStatus').text(data.is_active ? 'Active' : 'Inactive')
                     .removeClass('active inactive')
                     .addClass(data.is_active ? 'active' : 'inactive');
@@ -115,7 +115,7 @@
         }
 
         function updateMode() {
-            $.get('http://192.168.225.248:8000/fingerprint/mode', function(data) {
+            $.get('/fingerprint/mode', function(data) {
                 $('#modeStatus').text('Mode: ' + data.mode.toUpperCase())
                     .removeClass('active inactive')
                     .addClass(data.mode === 'verify' ? 'active' : 'inactive');
@@ -124,7 +124,7 @@
 
         function toggleActive(state) {
             $.ajax({
-                url: 'http://192.168.225.248:8000/fingerprint/is_active',
+                url: '/fingerprint/is_active',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ is_active: state }),
@@ -139,7 +139,7 @@
 
         function setMode(mode) {
             $.ajax({
-                url: 'http://192.168.225.248:8000/fingerprint/mode',
+                url: '/fingerprint/mode',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ mode: mode }),
@@ -159,7 +159,7 @@
         
         function confirmDelete() {
             $.ajax({
-                url: 'http://192.168.225.248:8000/fingerprint/delete_all',
+                url: '/fingerprint/delete_all',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ delete_all: true }),
