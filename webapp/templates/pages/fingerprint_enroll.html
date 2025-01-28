@@ -103,7 +103,7 @@
         // Set enrollment mode when page loads
         $(document).ready(function() {
             $.ajax({
-                url: '/fingerprint/mode',
+                url: 'http://192.168.225.248:8000/fingerprint/mode',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ mode: 'enroll' }),
@@ -122,7 +122,7 @@
         function pollEnrollmentStatus() {
             if (enrollmentComplete) return;
 
-            $.get('/fingerprint/enrollment_status', function(data) {
+            $.get('http://192.168.225.248:8000/fingerprint/enrollment_status', function(data) {
                 handleEnrollmentStatus(data);
                 
                 if (!enrollmentComplete) {
@@ -152,7 +152,7 @@
                     
                     // Switch back to verify mode
                     $.ajax({
-                        url: '/fingerprint/mode',
+                        url: 'http://192.168.225.248:8000/fingerprint/mode',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({ mode: 'verify' }),

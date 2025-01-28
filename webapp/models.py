@@ -39,9 +39,9 @@ class Attendance(models.Model):
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
-    address = models.TextField()
+    #username = models.CharField(max_length=100, unique=True)
+    #email = models.EmailField(unique=True)
+    #address = models.TextField()
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -49,8 +49,8 @@ class Attendance(models.Model):
     ]
     #gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     date = models.DateField(null=True, blank=True)
-    time_in = models.TimeField(null=True, blank=True, default=timezone.now)
-    time_out = models.TimeField(null=True, blank=True, default=timezone.now)
+    time_in = models.TimeField(null=True, blank=True)
+    time_out = models.TimeField(null=True, blank=True)
     STATUS_CHOICES = [
         ('leave', 'Leave'),
         ('in', 'In'),

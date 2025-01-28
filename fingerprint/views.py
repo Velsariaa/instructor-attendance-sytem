@@ -24,7 +24,7 @@ def is_active(request):
         return Response({'status': 'success', 'is_active': active_state})
         
     if request.method == 'GET':
-        is_active = cache.get(cache_key, True)   # Make this toggleable
+        is_active = cache.get(cache_key, False)   # Make this toggleable
         return Response({'is_active': is_active})
     
 
@@ -63,33 +63,43 @@ def verify(request):
         data = JSONParser().parse(request)
         match_id = data.get('match_id')
 
-        # Query the employee table in the default database
         try:
             # Check if match_id matches either fingerprint_id or backup_fingerprint_id
             employee = Employee.objects.get(
                 Q(fingerprint_id=match_id) | Q(backup_fingerprint_id=match_id)
             )
+
             # Extract the required details
             first_name = employee.first_name
             middle_name = employee.middle_name
             last_name = employee.last_name
-            #address = employee.address
-            #email = employee.email
-            #username = employee.username
 
-            # Save the attendance record
-            attendance = Attendance(
+            # Check if there's an existing attendance record for today without a timeout
+            today = timezone.now().date()
+            attendance = Attendance.objects.filter(
                 first_name=first_name,
                 middle_name=middle_name,
                 last_name=last_name,
-                username="username3", 
-                email="email3", 
-                address="address3",
-                date=timezone.now().date(),
-                time_in=timezone.now().time(),
-                status="Present3" 
-            )
-            attendance.save()
+                date=today,
+                time_out__isnull=True  # Ensure no timeout has been set
+            ).first()
+
+            if attendance:
+                # Update the existing record with time out and status out
+                attendance.time_out = timezone.now().time()
+                attendance.status = "Out"
+                attendance.save()
+            else:
+                # Create a new attendance record with time in and status in
+                attendance = Attendance(
+                    first_name=first_name,
+                    middle_name=middle_name,
+                    last_name=last_name,
+                    date=today,
+                    time_in=timezone.now().time(),
+                    status="In"
+                )
+                attendance.save()
         except Employee.DoesNotExist:
             return render(request, 'pages/error.html', {'error': 'Employee not found.'})
 

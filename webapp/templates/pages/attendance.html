@@ -48,7 +48,7 @@
             <td>{{ At.time_in }}</td>
             <td>{{ At.time_out }}</td>
             <td>
-                {{ availability_data.At.first_name|default:"No Status" }} <!-- Display the status -->
+                {{ At.status }}
             </td>
         </tr>
         {% endfor %}
