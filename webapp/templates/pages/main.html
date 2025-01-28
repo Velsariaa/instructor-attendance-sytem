@@ -41,6 +41,8 @@
                     <th>Status</th>
                     <th>Position</th>
                     <th>Actions</th>
+                    <th>Fingerprint ID</th>
+                    <th>Backup Fingerprint ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,7 +66,9 @@
                         <a href="#" class="action-link" onclick="confirmDelete('{% url 'delete_employee' ls.id %}')">
                             <i class="fas fa-trash-alt"></i>
                         </a>
-                    </td>                    
+                    </td>
+                    <td>{{ ls.fingerprint_id }}</td>     
+                    <td>{{ ls.backup_fingerprint_id }}</td>            
                 </tr>
                 {% empty %}
                 <tr>

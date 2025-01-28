@@ -47,7 +47,7 @@ class Attendance(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     ]
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    #gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     date = models.DateField(null=True, blank=True)
     time_in = models.TimeField(null=True, blank=True, default=timezone.now)
     time_out = models.TimeField(null=True, blank=True, default=timezone.now)
@@ -143,6 +143,8 @@ class Employee(models.Model):
     profile = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='')
     organization = models.CharField(max_length=50,default='', choices= ORGANIZATION_CHOICES)
+    fingerprint_id = models.CharField(max_length=20, null=True, blank=True)
+    backup_fingerprint_id = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
         return self.first_name
