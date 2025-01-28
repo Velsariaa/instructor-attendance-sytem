@@ -1,3 +1,5 @@
+{% load tz %}
+{% load static %}
 <html>
 <body>
 <style>
@@ -86,67 +88,65 @@
       &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;<u> {{Ls.first_name}}, {{Ls.last_name}}</u></p>
     <p class="name"> (Name)</p>
-    <p class="civil_service_title2"> For the month of______________________________________<br>    
-      Official hours for arrival <br>and departure
+    <p class="civil_service_title2">For the month of {{ current_month }}<br></p>
+
+  
+      <br><p>Official hours for arrival and departure</p>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      Regular days________________<br><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      Saturdays___________________ </p>
+      
   </EM></CAPTION>
 
   <TABLE border="1">
     <tr>
       <th rowspan="2">Day</th>
-      <th colspan="2">A.M.</th>
-      <th colspan="2">P.M.</th>
+      <th rowspan="2" colspan="2">Arrival</th>
+      <th rowspan="2" colspan="2">Departure</th>
       <th colspan="2">Undertime</th>
     </tr>
     <tr>
-      <th>Arrival</th>
-      <th>Departure</th>
-      <th>Arrival</th>
-      <th>Departure</th>
+      
       <th>Hours</th>
       <th>Minutes</th>
     </tr>
 
     <!-- Rows for each day (1-31) -->
-    <tr><th>1</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>2</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>3</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>4</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>5</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>6</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>7</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>8</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>9</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>10</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>11</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>12</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>13</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>14</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>15</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>16</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>17</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>18</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>19</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>20</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>21</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>22</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>23</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>24</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>25</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>26</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>27</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>28</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>29</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>30</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
-    <tr><th>31</th><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td>{{Ls.time_in}}</td><td>{{Ls.time_out}}</td><td><td></td></tr>
+    <tr><th>01</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>02</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>03</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>04</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>05</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>06</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>07</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>08</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>09</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>10</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>11</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>12</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>13</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>14</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>15</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>16</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>17</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>18</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>19</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>20</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>21</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>22</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>23</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>24</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>25</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>26</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>27</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>28</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>29</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>30</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
+    <tr><th>31</th><td colspan="2">{{Ls.time_in}}</td><td colspan="2">{{Ls.time_out}}</td><td></td><td></td></tr>
 
     <tr><th colspan="5"><div>Total</div></th><td><td></td></tr>
   </TABLE>

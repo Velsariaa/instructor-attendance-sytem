@@ -9,11 +9,14 @@ from rest_framework import status
 from webapp .models import Attendance, Employee
 from django.utils import timezone # type: ignore
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def index(request):
     return render(request, 'pages/fingerprint_control.html')
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def is_active(request):
     cache_key = 'fingerprint_active'
@@ -26,8 +29,9 @@ def is_active(request):
     if request.method == 'GET':
         is_active = cache.get(cache_key, False)   # Make this toggleable
         return Response({'is_active': is_active})
-    
 
+
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def mode(request):
     cache_key = 'fingerprint_mode'
@@ -42,6 +46,8 @@ def mode(request):
         return Response({'mode': current_mode})
 
 
+
+@csrf_exempt
 @api_view(['POST', 'GET'])
 def enroll(request):
     cache_key = 'fingerprint_enrollment_data'
@@ -65,6 +71,7 @@ def enroll(request):
     else:
         return JsonResponse({'error': 'Invalid request method'})
  
+@csrf_exempt
 @api_view(['POST'])
 def verify(request):
     if request.method == 'POST':
@@ -81,10 +88,12 @@ def verify(request):
             first_name = employee.first_name
             middle_name = employee.middle_name
             last_name = employee.last_name
+            idNum = employee.idNum
 
             # Check if there's an existing attendance record for today without a timeout
             today = timezone.now().date()
             attendance = Attendance.objects.filter(
+                IdNum=idNum,
                 first_name=first_name,
                 middle_name=middle_name,
                 last_name=last_name,
@@ -100,6 +109,7 @@ def verify(request):
             else:
                 # Create a new attendance record with time in and status in
                 attendance = Attendance(
+                    IdNum=idNum,
                     first_name=first_name,
                     middle_name=middle_name,
                     last_name=last_name,
@@ -114,6 +124,7 @@ def verify(request):
     return render(request, 'pages/main.html')
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def delete_all(request):
     cache_key = 'fingerprint_delete_all'
@@ -131,6 +142,7 @@ def delete_all(request):
         return Response({'delete_all': should_delete})
 
 
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def enrollment_status(request):
     cache_key = 'fingerprint_enrollment_status'

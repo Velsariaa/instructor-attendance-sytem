@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from .models import Instructor, Ins_Schedule
 from .forms import ScheduleForm
 from django.http import Http404
-
+from datetime import datetime
 
 def home(request):
     return redirect('user-login')
@@ -495,3 +495,11 @@ def fingerprint_enroll(request):
     else:
         form = ListofstaffForm()
     return render(request, 'pages/fingerprint_enroll.html', {'form': form})
+
+
+def dtr_page(request, pk):
+    Ls = Employee.objects.get(id=pk)
+    Tr = TimeRecord.objects.all()
+    current_month = timezone.now().strftime('%B %Y')  # Get current month and year
+
+    return render(request, 'pages/DTR.html', { 'Ls': Ls, 'Tr': Tr, 'current_month': current_month })
