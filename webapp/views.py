@@ -11,6 +11,9 @@ from .models import Instructor, Ins_Schedule
 from .forms import ScheduleForm
 from django.http import Http404
 from datetime import datetime
+from django.utils.timezone import localtime
+
+
 
 def home(request):
     return redirect('user-login')
@@ -58,11 +61,27 @@ def main_page(request):
     At = Attendance.objects.all() 
     return render(request, 'pages/main.html', {'Ls': Ls,'At': At})
 
-def dtr_page(request, pk ):
-    Ls = Employee.objects.get(id=pk)
-    Tr = TimeRecord.objects.all()
+def dtr_page(request, pk):
+    
+    Ls = get_object_or_404(Employee, id=pk)
 
-    return render(request, 'pages/DTR.html', { 'Ls':Ls, 'Tr':Tr})
+    
+    Tr = TimeRecord.objects.filter(employee=Ls).order_by('time_in')
+    instructor = get_object_or_404(Employee, id=pk)
+    At = TimeRecord.objects.filter(employee=instructor).order_by('time_in')
+    
+    for record in Tr:
+        record.time_in = localtime(record.time_in)
+        if record.time_out:
+            record.time_out = localtime(record.time_out)
+
+    return render(request, 'pages/DTR.html', {
+        'At': At, 
+        'instructor': instructor,
+        'Ls': Ls,
+        'Tr': Tr,
+        'current_month': timezone.now().strftime('%B %Y'),
+    })
 
 def attendance_page(request):
     At = Attendance.objects.all()
@@ -495,11 +514,3 @@ def fingerprint_enroll(request):
     else:
         form = ListofstaffForm()
     return render(request, 'pages/fingerprint_enroll.html', {'form': form})
-
-
-def dtr_page(request, pk):
-    Ls = Employee.objects.get(id=pk)
-    Tr = TimeRecord.objects.all()
-    current_month = timezone.now().strftime('%B %Y')  # Get current month and year
-
-    return render(request, 'pages/DTR.html', { 'Ls': Ls, 'Tr': Tr, 'current_month': current_month })

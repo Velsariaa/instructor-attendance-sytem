@@ -154,6 +154,7 @@ class TimeRecord(models.Model):
     time_in = models.DateTimeField(null=True, blank=True)
     time_out = models.DateTimeField(null=True, blank=True)
 
+
 class DailyTimeRecords(models.Model):
     image = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     name = models.CharField(max_length=50)
