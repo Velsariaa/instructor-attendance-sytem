@@ -62,26 +62,19 @@ def main_page(request):
     return render(request, 'pages/main.html', {'Ls': Ls,'At': At})
 
 def dtr_page(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
     
-    Ls = get_object_or_404(Employee, id=pk)
-
+    current_month = datetime.now().strftime('%B') 
     
-    Tr = TimeRecord.objects.filter(employee=Ls).order_by('time_in')
-    instructor = get_object_or_404(Employee, id=pk)
-    At = TimeRecord.objects.filter(employee=instructor).order_by('time_in')
+    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
     
-    for record in Tr:
-        record.time_in = localtime(record.time_in)
-        if record.time_out:
-            record.time_out = localtime(record.time_out)
-
-    return render(request, 'pages/DTR.html', {
-        'At': At, 
-        'instructor': instructor,
-        'Ls': Ls,
-        'Tr': Tr,
-        'current_month': timezone.now().strftime('%B %Y'),
-    })
+    context = {
+        'employee': employee,
+        'At': attendance_records, 
+        'current_month': current_month,
+    }
+    
+    return render(request, 'pages/DTR.html', context)
 
 def attendance_page(request):
     At = Attendance.objects.all()
