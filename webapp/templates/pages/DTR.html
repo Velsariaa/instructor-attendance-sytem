@@ -1,112 +1,159 @@
 {% load static %}
 {% load tz %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Time Record</title>
-  <style>
-    /* Center the entire page */
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      text-align: center;
-      padding: 20px;
-      border: 1px solid #000;
-    }
-
-    table {
-      border-collapse: collapse;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    table, th, td {
-      border: 1px solid black;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    th, td {
-      padding: 8px;
-    }
-
-    p {
-      margin: 10px 0;
-      font-size: 14px;
-    }
-
-    .signature {
-      margin-top: 20px;
-    }
-  </style>
-</head>
+<html>
 <body>
-  <section id="DTR">
-    <div class="container">
+<style>
+  /* Center the entire page */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Create a container for the form */
+  .container {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #000;
+  }
+
+  /* Table styles */
+  table, td, tr, th {
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Arial;
+    font-size: 15px;
+    width: 50%; 
+    margin: 0 auto;
+  }
+
+ 
+  p {
+    text-align: center;  
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.civil_service_title {
+    text-align: center; 
+    font-family: Arial;
+    font-size: 10px;
+  }
+
+  p.civil_service_title2 {
+    padding-left: 10px;
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.name {
+    
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.dtr {
+
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  p.circles {
+
+    font-family: Arial;
+    font-size: 12px;
+  }
+
+  p.line1 {
+
+    font-family: Arial;
+    font-size: 16px;
+  }
+  .dtr{
+    text-align: center;
+  }
+  div {
+    padding-left: 230px;
+  }
+</style>
+{% block content %}
+
+<section id="DTR">
+  <div class="container">
+    <CAPTION><EM>
       <p class="civil_service_title">Civil Service Form No. 48</p>
       <p class="dtr">DAILY TIME RECORD</p>
       <p class="circles">-----o0o-----</p>
-      <p class="line1"><u>{{ employee.first_name }}, {{ employee.last_name }}</u></p>
-      <p class="name">(Name)</p>
-      <p class="civil_service_title2">For the month of {{ current_month }}</p>
-      <p>Official hours for arrival and departure</p>
+      <p class="line1">  
+        <u>{{ employee.first_name }}, {{ employee.last_name }}</u></p>
+      <p class="name"> (Name)</p>
+      <p class="civil_service_title2">For the month of {{ current_month }}<br></p>
 
-      <table>
-        <caption>Daily Attendance Report</caption>
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Arrival</th>
-            <th>Departure</th>
-            <th>Undertime Hours</th>
-            <th>Undertime Minutes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in At %}
-          <tr>
-            <td>{{ record.date }}</td>
-            <td>{{ record.time_in|date:"h:i A" }}</td>
-            <td>
-              {% if record.time_out %}
-                {{ record.time_out|date:"h:i A" }}
-              {% else %}
-                Not Available
-              {% endif %}
-            </td>
-            <td>N/A</td>
-            <td>N/A</td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="5">No records available.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th colspan="3">Total</th>
-            <td colspan="2">N/A</td>
-          </tr>
-        </tfoot>
-      </table>
+    
+        <br><p>Official hours for arrival and departure</p>
+        
+        
+    </EM></CAPTION>
 
-      <p>I certify on my honor that the above is a true and correct report of the hours of work performed, record of which was made daily at the time of arrival and departure from office.</p>
-      <p class="signature">___________________________________________</p>
-      <p>VERIFIED as to the prescribed office hours:</p>
-      <p class="signature">___________________________________________</p>
-      <p>In Charge</p>
-    </div>
-  </section>
+    <TABLE border="1">
+      <tr>
+        <th rowspan="2">Day</th>
+        <th rowspan="2" colspan="2">Arrival</th>
+        <th rowspan="2" colspan="2">Departure</th>
+        <th colspan="2">Undertime</th>
+      </tr>
+      <tr>
+        
+        <th>Hours</th>
+        <th>Minutes</th>
+      </tr>
+
+      <!-- Rows for each day -->
+      {% for record in At %}
+            <tr>
+              <td>{{ record.date }}</td>
+              <td>{{ record.time_in|date:"h:i A" }}</td>
+              <td>
+                    {% if record.time_out %}
+                      {{ record.time_out|date:"h:i A" }}
+                    {% else %}
+                      Not Available
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No records available.</td>
+            </tr>
+            {% endfor %}
+      <tr><th colspan="5"><div>Total</div></th><td><td></td></tr>
+    </TABLE>
+
+    <p>I certify on my honor that the above is a true and correct report of the <br>
+    hours of work performed, record of which was made daily at the time <br>
+    of arrival and departure from office.</p><br>
+    ___________________________________________<br>
+
+    <p> VERIFIED as to the prescribed office hours:</p><br>
+    ___________________________________________<br>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    In Charge </p>
+
+  </div>
+</section>
+
+{% endblock %}
+
+
 </body>
 </html>
