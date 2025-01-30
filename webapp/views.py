@@ -11,7 +11,7 @@ from .models import Instructor, Ins_Schedule
 from .forms import ScheduleForm
 from django.http import Http404
 from datetime import datetime
-from django.utils.timezone import localtime
+from django.utils.timezone import now
 
 
 
@@ -64,8 +64,11 @@ def main_page(request):
 def dtr_page(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
     current_month = datetime.now().strftime('%B') 
-    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
-    
+    # attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
+    attendance_records = Attendance.objects.filter(IdNum=employee.idNum.strip(), date__month=now().month)
+
+
+    print(f"Employee ID: {employee.idNum}")
     print(f"Employee: {employee.first_name} {employee.last_name}")
     print(f"Attendance records: {attendance_records}")
 

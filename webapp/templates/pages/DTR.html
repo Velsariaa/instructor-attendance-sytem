@@ -2,158 +2,173 @@
 {% load tz %}
 
 <html>
+
 <body>
-<style>
-  /* Center the entire page */
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+  <style>
+    /* Center the entire page */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
-  /* Create a container for the form */
-  .container {
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #000;
-  }
+    /* Create a container for the form */
+    .container {
+      text-align: center;
+      padding: 20px;
+      border: 1px solid #000;
+    }
 
-  /* Table styles */
-  table, td, tr, th {
-    border-collapse: collapse;
-    text-align: center;
-    font-family: Arial;
-    font-size: 15px;
-    width: 50%; 
-    margin: 0 auto;
-  }
+    /* Table styles */
+    table,
+    td,
+    tr,
+    th {
+      border-collapse: collapse;
+      text-align: center;
+      font-family: Arial;
+      font-size: 15px;
+      width: 50%;
+      margin: 0 auto;
+    }
 
- 
-  p {
-    text-align: center;  
-    font-family: Arial;
-    font-size: 12px;
-  }
 
-  p.civil_service_title {
-    text-align: center; 
-    font-family: Arial;
-    font-size: 10px;
-  }
+    p {
+      text-align: center;
+      font-family: Arial;
+      font-size: 12px;
+    }
 
-  p.civil_service_title2 {
-    padding-left: 10px;
-    font-family: Arial;
-    font-size: 12px;
-  }
+    p.civil_service_title {
+      text-align: center;
+      font-family: Arial;
+      font-size: 10px;
+    }
 
-  p.name {
-    
-    font-family: Arial;
-    font-size: 12px;
-  }
+    p.civil_service_title2 {
+      padding-left: 10px;
+      font-family: Arial;
+      font-size: 12px;
+    }
 
-  p.dtr {
+    p.name {
 
-    font-family: Arial;
-    font-weight: bold;
-    font-size: 16px;
-  }
+      font-family: Arial;
+      font-size: 12px;
+    }
 
-  p.circles {
+    p.dtr {
 
-    font-family: Arial;
-    font-size: 12px;
-  }
+      font-family: Arial;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-  p.line1 {
+    p.circles {
 
-    font-family: Arial;
-    font-size: 16px;
-  }
-  .dtr{
-    text-align: center;
-  }
-  div {
-    padding-left: 230px;
-  }
-</style>
-{% block content %}
+      font-family: Arial;
+      font-size: 12px;
+    }
 
-<section id="DTR">
-  <div class="container">
-    <CAPTION><EM>
-      <p class="civil_service_title">Civil Service Form No. 48</p>
-      <p class="dtr">DAILY TIME RECORD</p>
-      <p class="circles">-----o0o-----</p>
-      <p class="line1">  
-        <u>{{ employee.first_name }}, {{ employee.last_name }}</u></p>
-      <p class="name"> (Name)</p>
-      <p class="civil_service_title2">For the month of {{ current_month }}<br></p>
+    p.line1 {
 
-    
-        <br><p>Official hours for arrival and departure</p>
-        
-        
-    </EM></CAPTION>
+      font-family: Arial;
+      font-size: 16px;
+    }
 
-    <TABLE border="1">
-      <tr>
-        <th rowspan="2">Day</th>
-        <th rowspan="2" colspan="2">Arrival</th>
-        <th rowspan="2" colspan="2">Departure</th>
-        <th colspan="2">Undertime</th>
-      </tr>
-      <tr>
-        
-        <th>Hours</th>
-        <th>Minutes</th>
-      </tr>
+    .dtr {
+      text-align: center;
+    }
 
-      <!-- Rows for each day -->
-      {% for record in At %}
-            <tr>
-              <td>{{ record.date }}</td>
-              <td>{{ record.time_in|date:"h:i A" }}</td>
-              <td>
-                    {% if record.time_out %}
-                      {{ record.time_out|date:"h:i A" }}
-                    {% else %}
-                      Not Available
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No records available.</td>
-            </tr>
-            {% endfor %}
-      <tr><th colspan="5"><div>Total</div></th><td><td></td></tr>
-    </TABLE>
+    div {
+      padding-left: 230px;
+    }
+  </style>
+  {% block content %}
 
-    <p>I certify on my honor that the above is a true and correct report of the <br>
-    hours of work performed, record of which was made daily at the time <br>
-    of arrival and departure from office.</p><br>
-    ___________________________________________<br>
+  <section id="DTR">
+    <div class="container">
+      <CAPTION><EM>
+          <p class="civil_service_title">Civil Service Form No. 48</p>
+          <p class="dtr">DAILY TIME RECORD</p>
+          <p class="circles">-----o0o-----</p>
+          <p class="line1">
+            <u>{{ employee.first_name }}, {{ employee.last_name }}</u>
+          </p>
+          <p class="name"> (Name)</p>
+          <p class="civil_service_title2">For the month of {{ current_month }}<br></p>
 
-    <p> VERIFIED as to the prescribed office hours:</p><br>
-    ___________________________________________<br>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-    In Charge </p>
 
-  </div>
-</section>
+          <br>
+          <p>Official hours for arrival and departure</p>
 
-{% endblock %}
+
+        </EM></CAPTION>
+
+      <TABLE border="1">
+        <tr>
+          <th rowspan="2">Day</th>
+          <th rowspan="2" colspan="2">Arrival</th>
+          <th rowspan="2" colspan="2">Departure</th>
+          <th colspan="2">Undertime</th>
+        </tr>
+        <tr>
+
+          <th>Hours</th>
+          <th>Minutes</th>
+        </tr>
+
+        <!-- Rows for each day -->
+        {% for record in At %}
+        <tr>
+          <td>{{ record.date }}</td>
+          <td>{{ record.time_in|date:"h:i A" }}</td>
+          <td>
+            {% if record.time_out %}
+            {{ record.time_out|date:"h:i A" }}
+            {% else %}
+            Not Available
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">No records available.</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <th colspan="5">
+            <div>Total</div>
+          </th>
+          <td>
+          <td></td>
+        </tr>
+      </TABLE>
+
+      <p>I certify on my honor that the above is a true and correct report of the <br>
+        hours of work performed, record of which was made daily at the time <br>
+        of arrival and departure from office.</p><br>
+      ___________________________________________<br>
+
+      <p> VERIFIED as to the prescribed office hours:</p><br>
+      ___________________________________________<br>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        In Charge </p>
+
+    </div>
+  </section>
+
+  {% endblock %}
 
 
 </body>
+
 </html>
