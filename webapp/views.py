@@ -96,24 +96,27 @@ def dtr_page(request, pk):
         'sunday': 'SU',
     }
 
-    attendance_data = []  # Annotated data for each record
+    total_undertime_minutes = 0  
+    attendance_data = []  
+
     for record in attendance_records:
         record_day = record.date.strftime('%A').lower()
-        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')  # Get the abbreviation
+        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')  
 
+        # Query the schedule
         schedule = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).first()
-        #print(f"Record Date: {record.date}, Day: {record_day}, Abbreviation: {record_day_abbr}, Schedule: {schedule}")
 
         if schedule and record.time_out:
             scheduled_end = schedule.end_time
             actual_out = record.time_out
 
-            #print(f"Schedule End Time: {scheduled_end}, Time Out: {actual_out}")
-
             if actual_out < scheduled_end:
                 undertime = datetime.combine(datetime.today(), scheduled_end) - datetime.combine(datetime.today(), actual_out)
                 undertime_hours = undertime.seconds // 3600
                 undertime_minutes = (undertime.seconds % 3600) // 60
+
+               
+                total_undertime_minutes += (undertime_hours * 60) + undertime_minutes
             else:
                 undertime_hours = 0
                 undertime_minutes = 0
@@ -129,12 +132,19 @@ def dtr_page(request, pk):
             'undertime_minutes': undertime_minutes,
         })
 
+    
+    total_hours = total_undertime_minutes // 60
+    total_minutes = total_undertime_minutes % 60
+
     context = {
         'employee': employee,
         'At': attendance_data,
         'current_month': current_month,
+        'total_undertime_hours': total_hours,
+        'total_undertime_minutes': total_minutes,
     }
     return render(request, 'pages/DTR.html', context)
+
 
 
 
