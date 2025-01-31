@@ -234,6 +234,7 @@ class Instructor(models.Model):
     
 class Ins_Schedule(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, to_field='idNum')
+    subject_code = models.CharField(max_length=20)  # Add subject code field
     subject = models.CharField(max_length=100)
     section = models.CharField(max_length=50)
     days = models.CharField(max_length=20)  # Ensure this is a CharField

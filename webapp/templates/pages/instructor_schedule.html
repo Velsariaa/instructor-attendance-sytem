@@ -29,6 +29,7 @@
   <table class="employee-table">
     <thead>
       <tr>
+        <th>Subject Code</th> <!-- Add subject code field -->
         <th>Subject</th>
         <th>Section</th>
         <th>Days</th>
@@ -40,6 +41,7 @@
     <tbody>
       {% for schedule in schedules %}
         <tr>
+          <td>{{ schedule.subject_code }}</td> <!-- Add subject code field -->
           <td>{{ schedule.subject }}</td>
           <td>{{ schedule.section }}</td>
           <td>{{ schedule.days }}</td>  <!-- Display the concatenated string of days -->

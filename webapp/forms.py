@@ -78,7 +78,7 @@ class ScheduleForm(forms.ModelForm):
 
     class Meta:
         model = Ins_Schedule
-        fields = ['subject', 'section', 'days', 'time', 'end_time', 'room']
+        fields = ['subject_code', 'subject', 'section', 'days', 'time', 'end_time', 'room']  
         widgets = {
             'time': forms.TimeInput(attrs={'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'type': 'time'}),
