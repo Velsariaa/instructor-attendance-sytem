@@ -12,7 +12,8 @@ from .forms import ScheduleForm
 from django.http import Http404
 from datetime import datetime
 from django.utils.timezone import now
-
+from datetime import datetime, timedelta
+from django.db.models import F
 
 
 def home(request):
@@ -61,24 +62,82 @@ def main_page(request):
     At = Attendance.objects.all() 
     return render(request, 'pages/main.html', {'Ls': Ls,'At': At})
 
+# def dtr_page(request, pk):
+#     employee = get_object_or_404(Employee, pk=pk)
+#     current_month = datetime.now().strftime('%B') 
+#     attendance_records = Attendance.objects.filter(IdNum=employee.idNum.strip(), date__month=now().month)
+
+#     print(f"Employee ID: {employee.idNum}")
+#     print(f"Employee: {employee.first_name} {employee.last_name}")
+#     print(f"Attendance records: {attendance_records}")
+
+#     context = {
+#         'employee': employee,
+#         'At': attendance_records, 
+#         'current_month': current_month,
+#     }
+    
+#     return render(request, 'pages/DTR.html', context)
+
+
 def dtr_page(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
-    current_month = datetime.now().strftime('%B') 
-    # attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
-    attendance_records = Attendance.objects.filter(IdNum=employee.idNum.strip(), date__month=now().month)
+    current_month = datetime.now().strftime('%B')
 
+    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
 
-    print(f"Employee ID: {employee.idNum}")
-    print(f"Employee: {employee.first_name} {employee.last_name}")
-    print(f"Attendance records: {attendance_records}")
+    DAY_ABBREVIATIONS = {
+        'monday': 'M',
+        'tuesday': 'T',
+        'wednesday': 'W',
+        'thursday': 'TH',
+        'friday': 'F',
+        'saturday': 'S',
+        'sunday': 'SU',
+    }
+
+    attendance_data = []  # Annotated data for each record
+    for record in attendance_records:
+        record_day = record.date.strftime('%A').lower()
+        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')  # Get the abbreviation
+
+        schedule = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).first()
+        #print(f"Record Date: {record.date}, Day: {record_day}, Abbreviation: {record_day_abbr}, Schedule: {schedule}")
+
+        if schedule and record.time_out:
+            scheduled_end = schedule.end_time
+            actual_out = record.time_out
+
+            #print(f"Schedule End Time: {scheduled_end}, Time Out: {actual_out}")
+
+            if actual_out < scheduled_end:
+                undertime = datetime.combine(datetime.today(), scheduled_end) - datetime.combine(datetime.today(), actual_out)
+                undertime_hours = undertime.seconds // 3600
+                undertime_minutes = (undertime.seconds % 3600) // 60
+            else:
+                undertime_hours = 0
+                undertime_minutes = 0
+        else:
+            undertime_hours = 'N/A'
+            undertime_minutes = 'N/A'
+
+        attendance_data.append({
+            'date': record.date,
+            'time_in': record.time_in,
+            'time_out': record.time_out,
+            'undertime_hours': undertime_hours,
+            'undertime_minutes': undertime_minutes,
+        })
 
     context = {
         'employee': employee,
-        'At': attendance_records, 
+        'At': attendance_data,
         'current_month': current_month,
     }
-    
     return render(request, 'pages/DTR.html', context)
+
+
+
 
 def attendance_page(request):
     At = Attendance.objects.all()
