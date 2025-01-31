@@ -124,15 +124,17 @@
         <!-- Rows for each day -->
         {% for record in At %}
         <tr>
-          <td>{{ record.date }}</td>
-          <td>{{ record.time_in|date:"h:i A" }}</td>
-          <td>
+          <td>{{ record.date|date:"d" }}</td>
+          <td colspan="2">{{ record.time_in|date:"h:i A" }}</td>
+          <td colspan="2">
             {% if record.time_out %}
             {{ record.time_out|date:"h:i A" }}
             {% else %}
             Not Available
             {% endif %}
           </td>
+          <td>Undertime Hours</td>
+          <td>Undertime Minutes</td>
         </tr>
         {% empty %}
         <tr>
