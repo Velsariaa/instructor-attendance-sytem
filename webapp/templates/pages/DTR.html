@@ -89,13 +89,24 @@
   </style>
   {% block content %}
 
+
+  
   <section id="DTR">
     <div class="container">
-      <form method="get" id="month-selector-form">
+      <form method="get" id="month-year-selector-form">
+        <!-- Month Dropdown -->
         <label for="month">Select Month:</label>
-        <select name="month" id="month" onchange="document.getElementById('month-selector-form').submit();">
+        <select name="month" id="month" onchange="document.getElementById('month-year-selector-form').submit();">
           {% for month in months %}
             <option value="{{ month }}" {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+          {% endfor %}
+        </select>
+      
+        <!-- Year Dropdown -->
+        <label for="year">Select Year:</label>
+        <select name="year" id="year" onchange="document.getElementById('month-year-selector-form').submit();">
+          {% for year in years %}
+            <option value="{{ year }}" {% if year|stringformat:"s" == current_year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
           {% endfor %}
         </select>
       </form>

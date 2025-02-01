@@ -15,6 +15,7 @@ from django.utils.timezone import now
 from datetime import datetime, timedelta
 from django.db.models import F
 from django.http import JsonResponse
+from datetime import datetime
 
 def home(request):
     return redirect('user-login')
@@ -83,12 +84,17 @@ def main_page(request):
 def dtr_page(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
     
-    # Get the selected month from the request, or use the current month as default
+    # Get selected month and year from the request, or default to the current month and year
     selected_month = request.GET.get('month', datetime.now().strftime('%B'))
+    selected_year = request.GET.get('year', str(datetime.now().year))
     month_number = datetime.strptime(selected_month, '%B').month
 
-    # Fetch attendance records for the selected month
-    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=month_number)
+    # Fetch attendance records for the selected month and year
+    attendance_records = Attendance.objects.filter(
+        IdNum=employee.idNum,
+        date__month=month_number,
+        date__year=int(selected_year),
+    )
 
     DAY_ABBREVIATIONS = {
         'monday': 'M',
@@ -105,7 +111,7 @@ def dtr_page(request, pk):
 
     for record in attendance_records:
         record_day = record.date.strftime('%A').lower()
-        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '') 
+        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')
 
         # Query the schedule
         schedule = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).first()
@@ -139,16 +145,22 @@ def dtr_page(request, pk):
     total_hours = total_undertime_minutes // 60
     total_minutes = total_undertime_minutes % 60
 
+    # Generate year options dynamically (e.g., from the last 5 years to the next year)
+    current_year = datetime.now().year
+    year_options = [current_year - i for i in range(5, -1, -1)]  # Last 5 years to this year
+
     context = {
         'employee': employee,
         'At': attendance_data,
         'current_month': selected_month,
+        'current_year': selected_year,
         'total_undertime_hours': total_hours,
         'total_undertime_minutes': total_minutes,
         'months': [
-            'January', 'February', 'March', 'April', 'May', 'June', 
+            'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ],
+        'years': year_options,
     }
     return render(request, 'pages/DTR.html', context)
 
