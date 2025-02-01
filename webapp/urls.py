@@ -1,12 +1,12 @@
 from django.urls import path # type: ignore
 from . import views
 
-
 urlpatterns = [
     path('', views.landing_page, name="landing_page"),
     path('Guest/', views.student, name='student'),
     path('main/', views.main_page, name='main'),
     path('dtr/<int:pk>/', views.dtr_page, name='dtr'),
+    path('dtr/<int:pk>/export/', views.export_dtr_pdf, name='export_dtr_pdf'),
     path('attendance/', views.attendance_page, name='attendance'),
     path('history/', views.history_page, name='history'),
     path('dtrm/', views.dtrm, name="dtrm"),

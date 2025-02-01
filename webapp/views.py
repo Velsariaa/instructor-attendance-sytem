@@ -16,6 +16,11 @@ from datetime import datetime, timedelta
 from django.db.models import F
 from django.http import JsonResponse
 from datetime import datetime
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from io import BytesIO
+
+
 
 def home(request):
     return redirect('user-login')
@@ -173,7 +178,45 @@ def dtr_page(request, pk):
     return render(request, 'pages/DTR.html', context)
 
 
+def export_dtr_pdf(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    
+    # Fetch the same data as in the `dtr_page` view
+    selected_month = request.GET.get('month', datetime.now().strftime('%B'))
+    selected_year = request.GET.get('year', str(datetime.now().year))
+    month_number = datetime.strptime(selected_month, '%B').month
 
+    attendance_records = Attendance.objects.filter(
+        IdNum=employee.idNum,
+        date__month=month_number,
+        date__year=int(selected_year),
+    )
+
+    # Build context similar to `dtr_page`
+    context = {
+        'employee': employee,
+        'At': attendance_records,
+        'current_month': selected_month,
+        'current_year': selected_year,
+        'months': [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ],
+        'years': [datetime.now().year - i for i in range(5, -1, -1)],
+    }
+
+    # Render the HTML content
+    html_string = render_to_string('pages/DTR.html', context)
+
+    # Generate the PDF
+    pdf_file = BytesIO()
+    HTML(string=html_string).write_pdf(pdf_file)
+    pdf_file.seek(0)
+
+    # Return the PDF as a response
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="{employee.first_name}_{employee.last_name}_DTR.pdf"'
+    return response
 
 
 def attendance_page(request):

@@ -92,6 +92,11 @@
 
   
   <section id="DTR">
+    <form action="{% url 'export_dtr_pdf' employee.id %}" method="get" style="text-align: center;">
+      <input type="hidden" name="month" value="{{ current_month }}">
+      <input type="hidden" name="year" value="{{ current_year }}">
+      <button type="submit" style="margin-top: 20px;">Export to PDF</button>
+    </form>
     <form method="get" id="month-year-selector-form">
       <!-- Month Dropdown -->
       <label for="month">Select Month:</label>
@@ -110,7 +115,6 @@
       </select>
     </form>
     <div class="container">
-      
       <CAPTION><EM>
           <p class="civil_service_title">Civil Service Form No. 48</p>
           <p class="dtr">DAILY TIME RECORD</p>
