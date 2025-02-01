@@ -113,15 +113,21 @@ def dtr_page(request, pk):
         record_day = record.date.strftime('%A').lower()
         record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')
 
-        # Query the schedule
-        schedule = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).first()
+        # Retrieve all schedules for the current day, sorted by start time
+        schedules = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).order_by('time')
 
-        if schedule and record.time_out:
-            scheduled_end = schedule.end_time
-            actual_out = record.time_out
+        if schedules.exists() and record.time_out:
+            # Get the start time of the first schedule and end time of the last schedule
+            earliest_start = schedules.first().time
+            latest_end = schedules.last().end_time
 
+            scheduled_start = datetime.combine(record.date, earliest_start)
+            scheduled_end = datetime.combine(record.date, latest_end)
+            actual_out = datetime.combine(record.date, record.time_out)
+
+            # Check for undertime
             if actual_out < scheduled_end:
-                undertime = datetime.combine(datetime.today(), scheduled_end) - datetime.combine(datetime.today(), actual_out)
+                undertime = scheduled_end - actual_out
                 undertime_hours = undertime.seconds // 3600
                 undertime_minutes = (undertime.seconds % 3600) // 60
 
@@ -130,9 +136,11 @@ def dtr_page(request, pk):
                 undertime_hours = 0
                 undertime_minutes = 0
         else:
+            # No schedule or missing time_out
             undertime_hours = 'N/A'
             undertime_minutes = 'N/A'
 
+        # Append record data
         attendance_data.append({
             'date': record.date,
             'time_in': record.time_in,
