@@ -14,7 +14,7 @@ from datetime import datetime
 from django.utils.timezone import now
 from datetime import datetime, timedelta
 from django.db.models import F
-
+from django.http import JsonResponse
 
 def home(request):
     return redirect('user-login')
@@ -82,9 +82,13 @@ def main_page(request):
 
 def dtr_page(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
-    current_month = datetime.now().strftime('%B')
+    
+    # Get the selected month from the request, or use the current month as default
+    selected_month = request.GET.get('month', datetime.now().strftime('%B'))
+    month_number = datetime.strptime(selected_month, '%B').month
 
-    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=datetime.now().month)
+    # Fetch attendance records for the selected month
+    attendance_records = Attendance.objects.filter(IdNum=employee.idNum, date__month=month_number)
 
     DAY_ABBREVIATIONS = {
         'monday': 'M',
@@ -96,12 +100,12 @@ def dtr_page(request, pk):
         'sunday': 'SU',
     }
 
-    total_undertime_minutes = 0  
-    attendance_data = []  
+    total_undertime_minutes = 0
+    attendance_data = []
 
     for record in attendance_records:
         record_day = record.date.strftime('%A').lower()
-        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '')  
+        record_day_abbr = DAY_ABBREVIATIONS.get(record_day, '') 
 
         # Query the schedule
         schedule = Ins_Schedule.objects.filter(employee=employee, days__icontains=record_day_abbr).first()
@@ -115,7 +119,6 @@ def dtr_page(request, pk):
                 undertime_hours = undertime.seconds // 3600
                 undertime_minutes = (undertime.seconds % 3600) // 60
 
-               
                 total_undertime_minutes += (undertime_hours * 60) + undertime_minutes
             else:
                 undertime_hours = 0
@@ -132,16 +135,20 @@ def dtr_page(request, pk):
             'undertime_minutes': undertime_minutes,
         })
 
-    
+    # Convert total undertime back to hours and minutes
     total_hours = total_undertime_minutes // 60
     total_minutes = total_undertime_minutes % 60
 
     context = {
         'employee': employee,
         'At': attendance_data,
-        'current_month': current_month,
+        'current_month': selected_month,
         'total_undertime_hours': total_hours,
         'total_undertime_minutes': total_minutes,
+        'months': [
+            'January', 'February', 'March', 'April', 'May', 'June', 
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ],
     }
     return render(request, 'pages/DTR.html', context)
 

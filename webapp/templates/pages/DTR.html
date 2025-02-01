@@ -91,6 +91,14 @@
 
   <section id="DTR">
     <div class="container">
+      <form method="get" id="month-selector-form">
+        <label for="month">Select Month:</label>
+        <select name="month" id="month" onchange="document.getElementById('month-selector-form').submit();">
+          {% for month in months %}
+            <option value="{{ month }}" {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+          {% endfor %}
+        </select>
+      </form>
       <CAPTION><EM>
           <p class="civil_service_title">Civil Service Form No. 48</p>
           <p class="dtr">DAILY TIME RECORD</p>
@@ -98,6 +106,7 @@
           <p class="line1">
             <u>{{ employee.first_name }}, {{ employee.last_name }}</u>
           </p>
+          
           <p class="name"> (Name)</p>
           <p class="civil_service_title2">For the month of {{ current_month }}<br></p>
 
