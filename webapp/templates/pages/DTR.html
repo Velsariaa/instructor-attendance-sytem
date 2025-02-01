@@ -5,6 +5,34 @@
 
 <body>
   <style>
+    @media print {
+  body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    label {
+      display: none;
+    }
+    button {
+      display: none;
+    }
+    select {
+      display: none;
+    }
+  }
+
+  /* Hide the elements that should not be printed */
+  .button, .other-ui-elements {
+    display: none;
+  }
+
+  /* Ensure the container takes up the entire printable area */
+  .container {
+    width: 100%;
+    height: auto;
+  }
+}
+
     /* Center the entire page */
     body {
       display: flex;
@@ -88,7 +116,6 @@
     }
   </style>
   {% block content %}
-
 
   
   <section id="DTR">
