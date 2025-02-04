@@ -307,8 +307,8 @@
         });
 
         function startEnrollmentProcess() {
-            $('#statusMessage').html('Please place your main finger on the sensor').addClass('success-message');
-            $('#mainFingerprint').addClass('active');
+            //$('#statusMessage').html('Please place your main finger on the sensor').addClass('success-message');
+            //$('#mainFingerprint').addClass('active');
 
             // Enroll fingerprint and update text boxes in real-time
             $.ajax({
@@ -320,13 +320,13 @@
                     $('#fingerprint_id').val(data.main);
                     $('#backup_fingerprint_id').val(data.backup);
                     // Restart the enrollment process to update text boxes continuously
-                    setTimeout(startEnrollmentProcess, 1000);
+                    setTimeout(startEnrollmentProcess, 3000);
                 },
                 error: function(xhr, status, error) {
                     $('#statusMessage').html('Failed to enroll fingerprint').removeClass('success-message').addClass('error-message');
                     $('#mainFingerprint').removeClass('active').addClass('error');
                     // Restart the enrollment process to update text boxes continuously
-                    setTimeout(startEnrollmentProcess, 1000);
+                    setTimeout(startEnrollmentProcess, 3000);
                 }
             });
         }
