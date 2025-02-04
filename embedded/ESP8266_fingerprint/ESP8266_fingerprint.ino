@@ -250,6 +250,8 @@ uint8_t getFingerprintEnroll() {
       Serial.println("No free slot available!");
       return FINGERPRINT_NOFINGER;
     }
+
+
     
     // Enroll main finger
     Serial.println("\nReady to enroll main finger!");
@@ -258,6 +260,12 @@ uint8_t getFingerprintEnroll() {
     bool mainEnrolled = false;
     
     while (!mainEnrolled) {
+        // Check if the mode is already in verify
+        checkMode();
+        if (mode == MODE_VERIFY) {
+            Serial.println("Already in Verify Mode, switching to verify process.");
+            return FINGERPRINT_OK; // Exit if already in verify mode
+        }
         p = finger.getImage();
         switch (p) {
             case FINGERPRINT_OK:
@@ -336,6 +344,12 @@ uint8_t getFingerprintEnroll() {
     bool backupEnrolled = false;
     
     while (!backupEnrolled) {
+        // Check if the mode is already in verify
+        checkMode();
+        if (mode == MODE_VERIFY) {
+            Serial.println("Already in Verify Mode, switching to verify process.");
+            return FINGERPRINT_OK; // Exit if already in verify mode
+        }
         p = finger.getImage();
         switch (p) {
             case FINGERPRINT_OK:
@@ -432,6 +446,8 @@ uint8_t getFingerprintEnroll() {
         }
         http.end();
     }
+
+    sendEnrollmentStatus("idle", "Place main finger on sensor", "main");
     
     return FINGERPRINT_OK;
 }
