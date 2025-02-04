@@ -11,8 +11,11 @@
 #define MODE_DELETE 3
 #define MODE_DELETE_ALL 4
 
+#define ENROLL_MODE_LED D5
+#define VERIFY_MODE_LED D6
+#define ACTIVE_MODE_LED D7
 
-const char* server_url = "http://192.168.9.248:8000";
+const char* server_url = "http://192.168.241.248:8000";
 const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
@@ -68,6 +71,7 @@ void setup()
   while (!Serial); 
   delay(100);
 
+  ledSetup();
   wifiSetup();
   fingerprintSetup();
 }
@@ -86,16 +90,25 @@ void loop() {
 
   checkDeleteCommand();
 
+  digitalWrite(ACTIVE_MODE_LED, HIGH);
   if (mode == MODE_ENROLL) {
+    digitalWrite(ENROLL_MODE_LED, HIGH);
     getFingerprintEnroll();
+    digitalWrite(ENROLL_MODE_LED, LOW);
+    digitalWrite(ACTIVE_MODE_LED, LOW);
+    delay(5000);
+
     mode = MODE_VERIFY;
-    
+  
   } else if (mode == MODE_VERIFY) {
+    digitalWrite(VERIFY_MODE_LED, HIGH);
     finger_status = getFingerprintIDez();
     if (finger_status != -1 && finger_status != -2) {
       Serial.print("Match");
       String jsonData = "{\"match_id\": " + String(finger_status) + "}";
       postVerificationResult(jsonData);
+      digitalWrite(ACTIVE_MODE_LED, LOW);
+      delay(5000);
     } else {
       if (finger_status == -2) {
         String jsonData = "{\"match_id\": -1}";
@@ -103,11 +116,28 @@ void loop() {
         for (int ii = 0; ii < 5; ii++) {
           Serial.print("Not Match");
         }
+        digitalWrite(ACTIVE_MODE_LED, LOW);
+        delay(5000);
       }
     }
+    digitalWrite(VERIFY_MODE_LED, LOW);
   }
   
   delay(50);
+}
+
+void ledSetup() {
+  pinMode(ENROLL_MODE_LED, OUTPUT);
+  pinMode(VERIFY_MODE_LED, OUTPUT);
+  pinMode(ACTIVE_MODE_LED, OUTPUT);
+
+  digitalWrite(ENROLL_MODE_LED, HIGH);
+  digitalWrite(VERIFY_MODE_LED, HIGH);
+  digitalWrite(ACTIVE_MODE_LED, HIGH);
+  delay(1000);
+  digitalWrite(ENROLL_MODE_LED, LOW);
+  digitalWrite(VERIFY_MODE_LED, LOW);
+  digitalWrite(ACTIVE_MODE_LED, LOW);
 }
 
 
