@@ -72,6 +72,7 @@
             z-index: 999;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
     <div class="control-panel">
@@ -106,6 +107,11 @@
     </div>
 
     <script>
+        function getCSRFToken() {
+            return document.querySelector('input[name="csrfmiddlewaretoken"]')?.value ||
+                   document.querySelector('meta[name="csrf-token"]')?.content || '';
+        }
+    
         function updateStatus() {
             $.get('/fingerprint/is_active', function(data) {
                 $('#activeStatus').text(data.is_active ? 'Active' : 'Inactive')
@@ -113,7 +119,7 @@
                     .addClass(data.is_active ? 'active' : 'inactive');
             });
         }
-
+    
         function updateMode() {
             $.get('/fingerprint/mode', function(data) {
                 $('#modeStatus').text('Mode: ' + data.mode.toUpperCase())
@@ -121,13 +127,16 @@
                     .addClass(data.mode === 'verify' ? 'active' : 'inactive');
             });
         }
-
+    
         function toggleActive(state) {
             $.ajax({
                 url: '/fingerprint/is_active',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ is_active: state }),
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
                 success: function(response) {
                     updateStatus();
                 },
@@ -136,13 +145,16 @@
                 }
             });
         }
-
+    
         function setMode(mode) {
             $.ajax({
                 url: '/fingerprint/mode',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ mode: mode }),
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
                 success: function(response) {
                     updateMode();
                 },
@@ -151,18 +163,21 @@
                 }
             });
         }
-
+    
         function deleteAllTemplates() {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('confirmDialog').style.display = 'block';
         }
-        
+    
         function confirmDelete() {
             $.ajax({
                 url: '/fingerprint/delete_all',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ delete_all: true }),
+                headers: {
+                    "X-CSRFToken": getCSRFToken()
+                },
                 success: function(response) {
                     if (response.status === 'success') {
                         alert('Delete command sent successfully');
@@ -177,21 +192,22 @@
                 }
             });
         }
-        
+    
         function cancelDelete() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('confirmDialog').style.display = 'none';
         }
-
+    
         // Update status and mode every 2 seconds
         setInterval(function() {
             updateStatus();
             updateMode();
         }, 2000);
-
+    
         // Initial update
         updateStatus();
         updateMode();
     </script>
+    
 </body>
 </html>

@@ -19,12 +19,13 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from io import BytesIO
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 def home(request):
     return redirect('user-login')
 
+@csrf_exempt
 @login_required
 def user_data(request):
     try:
@@ -53,6 +54,7 @@ def user_data(request):
         'user_profile': user_profile
     })
 
+@csrf_exempt
 def create_staff(request):
     if request.method == 'POST':
         form = ListofstaffForm(request.POST, request.FILES)
@@ -61,7 +63,7 @@ def create_staff(request):
             return redirect('main') 
     else:
         form = ListofstaffForm()
-    return render(request, 'pages/addEmp.html', {'form': form})
+    return render(request, 'pages/fingerprint_enroll.html', {'form': form})
 
 def main_page(request):
     Ls = Employee.objects.all()
@@ -244,6 +246,8 @@ def history_page(request):
     cd = History.objects.all()
     return render(request, 'pages/history.html',{'cd': cd})
 
+
+@csrf_exempt
 def dtrm(request):
     At = Attendance.objects.all()    
     Ls = Employee.objects.all()
@@ -266,6 +270,7 @@ def dtrm(request):
     form = Dtrc()
     return render(request, 'pages/dtrm.html',{'DTR': DTR , 'form': form, 'At':At, 'Ls':Ls})
 
+@csrf_exempt
 def Login(request):
     if request.method == 'POST':
         username=request.POST.get('username')
@@ -282,6 +287,7 @@ def Login(request):
     return render(request, 'pages/login.html')
 
 
+@csrf_exempt
 def register(request):
     if request.method=='POST':
         uname = request.POST.get('username')
@@ -299,6 +305,7 @@ def register(request):
         
     return render(request, 'pages/registration.html')
 
+@csrf_exempt
 def org_chart(request):
     if request.method == 'POST':
         form = OrgChartListForm(request.POST)  
@@ -321,6 +328,7 @@ def schedule(request):
 def position(request):
     return render(request, 'pages/position.html')
 
+@csrf_exempt
 def edit_employee(request, id):
     listofstaff = get_object_or_404(Employee, id=id)
     if request.method == 'POST':
@@ -337,6 +345,7 @@ def delete_employee(request, id):
     listofstaff.delete()
     return redirect('main')  
 
+@csrf_exempt
 def time_in(request):
     if request.method == 'POST':
         form = TimeRecordForm(request.POST)
@@ -349,6 +358,7 @@ def time_in(request):
         form = TimeRecordForm()
     return render(request, 'pages/time_in.html', {'form': form})
 
+@csrf_exempt
 def time_out(request):
     if request.method == 'POST':
         form = TimeRecordForm(request.POST)
@@ -367,7 +377,7 @@ def time_out(request):
 def Logout(request):
     return render(request, 'pages/login.html')
 
-
+@csrf_exempt
 @login_required
 def UEmployee(request):
     try:
@@ -385,7 +395,7 @@ def UEmployee(request):
         }
     )
 
-
+@csrf_exempt
 @login_required
 def UEmployeeSched(request):
     try:
@@ -397,6 +407,7 @@ def UEmployeeSched(request):
     return render(request, 'pages/userEmpSchedule.html', {'user_data': user_data,'user': request.user, 'posts': posts, })
     
 
+@csrf_exempt
 def AdminP(request):
     if request.method == 'POST':
         username=request.POST.get('username')
@@ -412,6 +423,7 @@ def AdminP(request):
     return render(request, 'pages/login.html')
 
 
+@csrf_exempt
 def Udtr(request):
     At = Attendance.objects.all()    
     Ls = Employee.objects.all()
@@ -439,6 +451,7 @@ def HomeView(request):
     post = Post.objects.order_by('-created_at')
     return render (request,'pages/userpanel.html',{'post':post})
 
+@csrf_exempt
 @login_required
 def createPost(request):
     if request.method == 'POST':
@@ -457,6 +470,7 @@ def Details(request,pk):
     post = Post.objects.get(pk=pk)
     return render(request,'pages/post_detail.html',{'post':post})
 
+@csrf_exempt
 @login_required
 def Apost(request):
     user_profile = UserProfile.objects.filter(user=request.user).first()
@@ -499,6 +513,7 @@ def adminDetails(request,pk):
 #     users = User.objects.all()  # Fetch all users from the database
 #     return render(request, 'pages/admin-create-post.html', {'form': form, 'users': users})
 
+@csrf_exempt
 def superuser_login(request):
     if request.method == 'POST':
         form = SuperUserLoginForm(request.POST)
@@ -516,6 +531,7 @@ def superuser_login(request):
         error_message = None
     return render(request, 'pages/adminpanel.html', {'form': form, 'error_message': error_message})
 
+@csrf_exempt
 def copy_user_data_view(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
@@ -545,6 +561,7 @@ def studOrg(request):
     orgList = OrgChartList.objects.all()
     return render(request, 'pages/studorgchart.html', {'orgList': orgList})
 
+@csrf_exempt
 def comlabA(request):
     # Fetch all equipment entries from the database
     eq = Equipment.objects.all()
@@ -583,6 +600,7 @@ def instructor_schedule(request, instructor_id):
     }
     return render(request, 'pages/instructor_schedule.html', context)
 
+@csrf_exempt
 def add_schedule(request, instructor_id):
     instructor = get_object_or_404(Instructor, id=instructor_id)
     if request.method == 'POST':
@@ -596,6 +614,7 @@ def add_schedule(request, instructor_id):
         form = ScheduleForm()
     return render(request, 'pages/add_edit_schedule.html', {'form': form, 'instructor': instructor})
 
+@csrf_exempt
 def edit_schedule(request, schedule_id):
     schedule = get_object_or_404(Ins_Schedule, id=schedule_id)
     if request.method == 'POST':
@@ -607,6 +626,7 @@ def edit_schedule(request, schedule_id):
         form = ScheduleForm(instance=schedule)
     return render(request, 'pages/add_edit_schedule.html', {'form': form})
 
+@csrf_exempt
 def instructor_schedule_view(request, idNum):  # Parameter matches the column name
     try:
         # Query using idNum
@@ -640,7 +660,7 @@ def delete_schedule(request, schedule_id):
     schedule.delete()
     return redirect('Ins_Schedule', idNum=employee_id)
 
-
+@csrf_exempt
 def fingerprint_enroll(request):
     if request.method == 'POST':
         form = ListofstaffForm(request.POST, request.FILES)
