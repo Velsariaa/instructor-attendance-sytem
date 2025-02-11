@@ -115,14 +115,14 @@
             <img src="{% static 'image/logoams.png' %}" alt="Logo">
         </div>
         <h2>Login</h2>
-        <form method="post" class="login-form">
+        <form method="post" class="login-form" action="{% url 'user_login' %}">
             {% csrf_token %}
-            <input type="text" name="username" placeholder="Username">
+            <input type="text" name="username" placeholder="ID Number">
             <input type="password" name="password" placeholder="Password">
             <button type="submit">Login</button>
         </form>
-        {% if form.errors %}
-            <p class="error-message">Your username and password didn't match. Please try again.</p>
+        {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
         {% endif %}
     </div>
 </body>

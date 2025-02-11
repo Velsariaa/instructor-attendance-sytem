@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'fingerprint',
     'rest_framework',
 ]
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',

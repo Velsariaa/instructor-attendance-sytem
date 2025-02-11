@@ -20,7 +20,8 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from io import BytesIO
 from django.views.decorators.csrf import csrf_exempt
-
+from django.shortcuts import render, redirect
+from .models import Employee
 
 def home(request):
     return redirect('user-login')
@@ -670,3 +671,26 @@ def fingerprint_enroll(request):
     else:
         form = ListofstaffForm()
     return render(request, 'pages/fingerprint_enroll.html', {'form': form})
+
+def user_login(request):
+    error_message = None
+
+    if request.method == "POST":
+        idNum = request.POST.get("username")
+        password = request.POST.get("password")
+        if not idNum or not password:
+            error_message = "ID Number and Password are required."
+        else:
+            try:
+                employee = Employee.objects.get(idNum=idNum)
+                if employee.password == password:  # Replace with proper password hashing check
+                    # Store user information in the session
+                    request.session['employee_id'] = employee.id
+                    return redirect("user_data")  # Replace with your success redirect
+                else:
+                    error_message = "Invalid ID or password."
+            except Employee.DoesNotExist:
+                error_message = "Invalid ID or password."
+
+    return render(request, "registration/user-login.html", {"error_message": error_message})
+
