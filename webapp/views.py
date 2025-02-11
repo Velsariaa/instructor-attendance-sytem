@@ -34,6 +34,11 @@ def home(request):
 @csrf_exempt
 @login_required
 def user_data(request):
+    employee_id = request.session.get('employee_id')
+    if not employee_id:
+        return redirect('user_login')
+
+    employee = get_object_or_404(Employee, id=employee_id)
     user_profile = UserProfile.objects.filter(user=request.user).first()
     user_data = UserData.objects.filter(user=request.user)
     posts = Post.objects.select_related('author').all().order_by('-created_at')
@@ -53,7 +58,7 @@ def user_data(request):
         'user_data': user_data,
         'posts': posts,
         'user_profile': user_profile,
-        'first_name': request.user.first_name,  # Pass the first name
+        'first_name': employee.first_name,  # Pass the first name
     })
 
 @csrf_exempt
@@ -683,13 +688,18 @@ def user_login(request):
         if not idNum or not password:
             error_message = "ID Number and Password are required."
         else:
-            # Authenticate user
-            user = authenticate(request, username=idNum, password=password)
-
-            if user is not None:
-                login(request, user)
-                return redirect("user_data")  # Redirect on success
-            else:
+            try:
+                employee = Employee.objects.get(idNum=idNum)
+                if employee.password == password:
+                    # Create a user session manually
+                    request.session['employee_id'] = employee.id
+                    request.session['employee_idNum'] = employee.idNum
+                    request.session['employee_first_name'] = employee.first_name
+                    request.session['employee_last_name'] = employee.last_name
+                    return redirect("user_data")  # Redirect on success
+                else:
+                    error_message = "Invalid ID or password."
+            except Employee.DoesNotExist:
                 error_message = "Invalid ID or password."
 
     return render(request, "registration/user-login.html", {"error_message": error_message})

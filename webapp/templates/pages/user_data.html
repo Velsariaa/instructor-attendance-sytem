@@ -23,7 +23,7 @@
             {% else %}
                 <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
             {% endif %}
-            <p class="user-name">{{ first_name }}</p>
+            <p class="user-name">{{ user.first_name }}</p>
         </div>
     {% endif %}
     <hr>
@@ -44,7 +44,7 @@
             {% else %}
                 <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" width="100" height="100">
             {% endif %}
-            <p class="user-name">{{ first_name }}</p>
+            <p class="user-name">{{ user.first_name }}</p>
             <button class="buttonC" onclick="toggleCreatePost()">Create Post</button>
         </div>
         <hr>
