@@ -10,7 +10,7 @@ class Dtrc(forms.Form):
 class ListofstaffForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ['idNum', 'first_name', 'last_name', 'middle_name', 'birthday', 'status', 'position', 'profile','age', 'gender','organization', 'fingerprint_id', 'backup_fingerprint_id']
+        fields = ['idNum', 'first_name', 'last_name', 'middle_name', 'birthday', 'status', 'position', 'profile','age', 'gender','organization', 'fingerprint_id', 'backup_fingerprint_id','password']
 
 class OrgChartListForm(forms.ModelForm):
     class Meta:
@@ -20,7 +20,7 @@ class OrgChartListForm(forms.ModelForm):
 class ListofstaffForms(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ['idNum', 'first_name', 'last_name', 'middle_name', 'birthday', 'age', 'status', 'position', 'profile', 'gender', 'organization', 'fingerprint_id', 'backup_fingerprint_id']
+        fields = ['idNum', 'first_name', 'last_name', 'middle_name', 'birthday', 'age', 'status', 'position', 'profile', 'gender', 'organization', 'fingerprint_id', 'backup_fingerprint_id', 'password']
 
 class TimeRecordForm(forms.Form):
     idNum = forms.CharField(max_length=20)
