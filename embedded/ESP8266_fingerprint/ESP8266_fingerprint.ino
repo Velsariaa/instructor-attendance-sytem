@@ -15,15 +15,15 @@
 #define VERIFY_MODE_LED D6
 #define ACTIVE_MODE_LED D7
 
-const char* server_url = "http://192.168.241.248:8000";
+const char* server_url = "http://192.168.1.7:8000";
 const char* is_active_api = "/fingerprint/is_active";
 const char* mode_api = "/fingerprint/mode";
 const char* enroll_api = "/fingerprint/enroll";
 const char* verify_api = "/fingerprint/verify";
 const char* delete_all_api = "/fingerprint/delete_all";
 
-const char* ssid = "test";      
-const char* password = "88888888"; 
+const char* ssid = "ZTE_2.4G_FKCu4Z";      
+const char* password = "k3dPHEA9"; 
 
 SoftwareSerial mySerial(TX, RX); 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
