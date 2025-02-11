@@ -224,7 +224,7 @@ def export_dtr_pdf(request, pk):
 def attendance_page(request):
     At = Attendance.objects.all()
     Tr = TimeRecord.objects.all()
-    sd = Schedule.objects.all()
+    sd = Ins_Schedule.objects.all()
     
     
     # Fetch all availability statuses
