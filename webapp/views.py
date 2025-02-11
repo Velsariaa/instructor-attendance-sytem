@@ -22,6 +22,11 @@ from io import BytesIO
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from .models import Employee
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import UserProfile, UserData, Post
+from .forms import PostForm
+
 
 def home(request):
     return redirect('user-login')
@@ -29,15 +34,10 @@ def home(request):
 @csrf_exempt
 @login_required
 def user_data(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        user_profile = None
- 
     user_profile = UserProfile.objects.filter(user=request.user).first()
-    user_data = UserData.objects.filter(user=request.user)  
+    user_data = UserData.objects.filter(user=request.user)
     posts = Post.objects.select_related('author').all().order_by('-created_at')
-    
+
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -52,7 +52,8 @@ def user_data(request):
         'form': form,
         'user_data': user_data,
         'posts': posts,
-        'user_profile': user_profile
+        'user_profile': user_profile,
+        'first_name': request.user.first_name,  # Pass the first name
     })
 
 @csrf_exempt
@@ -678,19 +679,17 @@ def user_login(request):
     if request.method == "POST":
         idNum = request.POST.get("username")
         password = request.POST.get("password")
+
         if not idNum or not password:
             error_message = "ID Number and Password are required."
         else:
-            try:
-                employee = Employee.objects.get(idNum=idNum)
-                if employee.password == password:  # Replace with proper password hashing check
-                    # Store user information in the session
-                    request.session['employee_id'] = employee.id
-                    return redirect("user_data")  # Replace with your success redirect
-                else:
-                    error_message = "Invalid ID or password."
-            except Employee.DoesNotExist:
+            # Authenticate user
+            user = authenticate(request, username=idNum, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect("user_data")  # Redirect on success
+            else:
                 error_message = "Invalid ID or password."
 
     return render(request, "registration/user-login.html", {"error_message": error_message})
-
