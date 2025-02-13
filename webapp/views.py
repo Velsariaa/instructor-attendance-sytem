@@ -330,7 +330,8 @@ def org_List(request):
 
 def schedule(request):
     Ls = Employee.objects.all()
-    return render(request, 'pages/schedule.html',{'Ls':Ls})
+    Sc = Ins_Schedule.objects.all()
+    return render(request, 'pages/schedule.html',{'Ls':Ls, 'Sc':Sc})
 
 def position(request):
     return render(request, 'pages/position.html')
@@ -403,15 +404,25 @@ def UEmployee(request):
     )
 
 @csrf_exempt
-@login_required
 def UEmployeeSched(request):
+    # Check if the user is logged in (i.e., session exists)
+    if 'employee_idNum' not in request.session:
+        return redirect("user_login")  # Redirect to login if not authenticated
+
     try:
-        user_data = UserData.objects.get(user=request.user)
-    except UserData.DoesNotExist:
-        user_data = None
+        # Fetch the logged-in employee using session data
+        employee = Employee.objects.get(idNum=request.session['employee_idNum'])
+
+        # Get schedules for the logged-in employee
+        Sc = Ins_Schedule.objects.filter(employee=employee)
+
+    except Employee.DoesNotExist:
+        Sc = Ins_Schedule.objects.none()  # No schedules if no matching employee found
+
     posts = Post.objects.all().order_by('-created_at')
-    
-    return render(request, 'pages/userEmpSchedule.html', {'user_data': user_data,'user': request.user, 'posts': posts, })
+
+    return render(request, 'pages/userEmpSchedule.html', {'Sc': Sc, 'posts': posts})
+
     
 
 @csrf_exempt
