@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
-from webapp .models import Attendance, Employee
+from webapp .models import Attendance, Employee, Ins_Schedule
 from django.utils import timezone # type: ignore
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -84,14 +84,25 @@ def verify(request):
                 Q(fingerprint_id=match_id) | Q(backup_fingerprint_id=match_id)
             )
 
-            # Extract the required details
+            # Extract details
             first_name = employee.first_name
             middle_name = employee.middle_name
             last_name = employee.last_name
             idNum = employee.idNum
 
-            # Check if there's an existing attendance record for today without a timeout
+            # Get today's date and current time
             today = timezone.now().date()
+            current_time = timezone.now().time()
+
+            # Find earliest schedule time
+            schedules = Ins_Schedule.objects.filter(employee=employee)
+            min_schedule_time = min((schedule.time for schedule in schedules), default=None)
+
+            status = "In"
+            if min_schedule_time and current_time > min_schedule_time:
+                status = "Late"
+
+            # Check existing attendance without timeout
             attendance = Attendance.objects.filter(
                 IdNum=idNum,
                 first_name=first_name,
@@ -107,7 +118,7 @@ def verify(request):
                 attendance.status = "Out"
                 attendance.save()
             else:
-                # Create a new attendance record with time in and status in
+                # Create a new attendance record with time in and dynamic status
                 attendance = Attendance(
                     IdNum=idNum,
                     first_name=first_name,
@@ -115,7 +126,7 @@ def verify(request):
                     last_name=last_name,
                     date=today,
                     time_in=timezone.now().time(),
-                    status="In"
+                    status=status
                 )
                 attendance.save()
         except Employee.DoesNotExist:
