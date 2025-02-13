@@ -3,6 +3,53 @@
    
 {% block content %}
 {% include 'pages/logout.html' %}
+
+<style>
+/* Table Styling */
+table {
+    width:65%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 13%;
+}
+
+/* Table Headers */
+thead {
+    background-color: #004d99;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+/* Table Rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #cce5ff;
+    transition: 0.3s;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+</style>
+
 <link rel="stylesheet" href="{% static 'css/global.css' %}">
 <link rel="stylesheet" href="{% static 'css/userEmpSched.css' %}">
 <!--SIDEBAR-->
@@ -61,11 +108,47 @@
     <a class="Schedule" href="{% url 'userEmpSched' %}">Schedule</a>
     <a class="Photos" href="Photos">Photos</a>
   </ul>
+
+  
+
 </div>
+
+
 
     
   </div>
+
+  
 </div>
+
+<h2>Schedule</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Subject Code</th>
+            <th>Subject</th>
+            <th>Section</th>
+            <th>Days</th>
+            <th>Time</th>
+            <th>End Time</th>
+            <th>Room</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sc in Sc %}
+        <tr>
+            <td>{{ sc.subject_code }}</td>
+            <td>{{ sc.subject }}</td>
+            <td>{{ sc.section }}</td>
+            <td>{{ sc.days }}</td>
+            <td>{{ sc.time }}</td>
+            <td>{{ sc.end_time }}</td>
+            <td>{{ sc.room }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
