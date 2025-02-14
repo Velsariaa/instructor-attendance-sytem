@@ -64,3 +64,5 @@ coverage/
 *.war
 *.ear
 *.iml
+myvenv/
+/myvenv

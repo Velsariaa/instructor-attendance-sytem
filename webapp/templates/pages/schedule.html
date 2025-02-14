@@ -42,39 +42,4 @@
 
 </div>
 
-<h2>Schedule</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Subject Code</th>
-            <th>Subject</th>
-            <th>Section</th>
-            <th>Days</th>
-            <th>Time</th>
-            <th>End Time</th>
-            <th>Room</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if Sc %}
-            {% for sc in Sc %}
-            <tr>
-                <td>{{ sc.subject_code }}</td>
-                <td>{{ sc.subject }}</td>
-                <td>{{ sc.section }}</td>
-                <td>{{ sc.days }}</td>
-                <td>{{ sc.time }}</td>
-                <td>{{ sc.end_time }}</td>
-                <td>{{ sc.room }}</td>
-            </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="7">No schedule available.</td>
-            </tr>
-        {% endif %}
-    </tbody>
-</table>
-
-
 {% endblock %}
