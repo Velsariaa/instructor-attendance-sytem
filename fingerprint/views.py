@@ -10,6 +10,8 @@ from webapp .models import Attendance, Employee, Ins_Schedule
 from django.utils import timezone # type: ignore
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+import pytz
 
 @csrf_exempt
 def index(request):
@@ -90,9 +92,10 @@ def verify(request):
             last_name = employee.last_name
             idNum = employee.idNum
 
-            # Get today's date and current time
-            today = timezone.now().date()
-            current_time = timezone.now().time()
+            # Get today's date and current time in Philippine Time (PHT)
+            philippines_timezone = pytz.timezone('Asia/Manila')
+            today = timezone.now().astimezone(philippines_timezone).date()
+            current_time = timezone.now().astimezone(philippines_timezone).time()
 
             # Find earliest schedule time
             schedules = Ins_Schedule.objects.filter(employee=employee)
@@ -113,9 +116,10 @@ def verify(request):
             ).first()
 
             if attendance:
-                # Update the existing record with time out and status out
-                attendance.time_out = timezone.now().time()
-                attendance.status = "Out"
+                # If the employee was late at clock-in, mark the clock-out status as "Late" as well
+                if status == "Late":
+                    attendance.status = "Late"
+                attendance.time_out = timezone.now().astimezone(philippines_timezone).time()
                 attendance.save()
             else:
                 # Create a new attendance record with time in and dynamic status
@@ -125,7 +129,7 @@ def verify(request):
                     middle_name=middle_name,
                     last_name=last_name,
                     date=today,
-                    time_in=timezone.now().time(),
+                    time_in=timezone.now().astimezone(philippines_timezone).time(),
                     status=status
                 )
                 attendance.save()
@@ -133,6 +137,7 @@ def verify(request):
             return render(request, 'pages/error.html', {'error': 'Employee not found.'})
 
     return render(request, 'pages/main.html')
+
 
 
 @csrf_exempt
