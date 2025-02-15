@@ -68,7 +68,7 @@ tr:hover {
               {% else %}
                   <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" class="profile-pic">
               {% endif %}
-              <p class="user-name">{{ user.username }}</p>
+              <p class="user-name">{{ first_name }}</p>
           </div>
       {% endif %}
       <hr>

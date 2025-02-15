@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import UserProfile, UserData, Post
 from .forms import PostForm
+from .models import UserData, Post, UserProfile
 
 
 def home(request):
@@ -60,6 +61,66 @@ def user_data(request):
         'user_profile': user_profile,
         'first_name': employee.first_name,  # Pass the first name
     })
+
+@csrf_exempt
+@login_required
+def UEmployee(request):
+    employee_id = request.session.get('employee_id')
+    if not employee_id:
+        return redirect('user_login')
+    
+    try:
+        user_data = UserData.objects.get(user=request.user)
+    except UserData.DoesNotExist:
+        user_data = None  
+
+    employee = get_object_or_404(Employee, id=employee_id)
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+
+    posts = Post.objects.all().order_by('-created_at')
+
+    return render(
+        request, 
+        'pages/userEmp.html', 
+        {
+            'user_data': user_data,   
+            'user': request.user,      
+            'posts': posts,
+            'first_name': employee.first_name,  
+            'user_profile': user_profile, 
+        }
+    )
+
+@csrf_exempt
+def UEmployeeSched(request):
+    employee_id = request.session.get('employee_id')
+    if not employee_id:
+        return redirect('user_login')
+    
+    try:
+        user_data = UserData.objects.get(user=request.user)
+    except UserData.DoesNotExist:
+        user_data = None  
+
+    employee = get_object_or_404(Employee, id=employee_id)
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+
+    posts = Post.objects.all().order_by('-created_at')
+
+    return render(
+        request, 
+        'pages/userEmpSchedule.html', 
+        {
+            'user_data': user_data,   
+            'user': request.user,      
+            'posts': posts,
+            'first_name': employee.first_name,  
+            'user_profile': user_profile, 
+        }
+    )
+
+
+
 
 @csrf_exempt
 def create_staff(request):
@@ -327,7 +388,6 @@ def org_List(request):
     orgList = OrgChartList.objects.all()
     return render(request, 'pages/orgChartList.html', {'orgList': orgList})
 
-
 def schedule(request):
     Ls = Employee.objects.all()
     Sc = Ins_Schedule.objects.all()
@@ -384,46 +444,6 @@ def time_out(request):
 
 def Logout(request):
     return render(request, 'pages/login.html')
-
-@csrf_exempt
-@login_required
-def UEmployee(request):
-    try:
-        user_data = UserData.objects.get(user=request.user)
-    except UserData.DoesNotExist:
-        user_data = None  
-    posts = Post.objects.all().order_by('-created_at')
-    return render(
-        request, 
-        'pages/userEmp.html', 
-        {
-            'user_data': user_data,   
-            'user': request.user,      
-            'posts': posts,            
-        }
-    )
-
-@csrf_exempt
-def UEmployeeSched(request):
-    # Check if the user is logged in (i.e., session exists)
-    if 'employee_idNum' not in request.session:
-        return redirect("user_login")  # Redirect to login if not authenticated
-
-    try:
-        # Fetch the logged-in employee using session data
-        employee = Employee.objects.get(idNum=request.session['employee_idNum'])
-
-        # Get schedules for the logged-in employee
-        Sc = Ins_Schedule.objects.filter(employee=employee)
-
-    except Employee.DoesNotExist:
-        Sc = Ins_Schedule.objects.none()  # No schedules if no matching employee found
-
-    posts = Post.objects.all().order_by('-created_at')
-
-    return render(request, 'pages/userEmpSchedule.html', {'Sc': Sc, 'posts': posts})
-
-    
 
 @csrf_exempt
 def AdminP(request):
