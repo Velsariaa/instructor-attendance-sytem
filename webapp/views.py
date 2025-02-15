@@ -714,3 +714,27 @@ def user_login(request):
                 error_message = "Invalid ID or password."
 
     return render(request, "registration/user-login.html", {"error_message": error_message})
+
+def status_page(request):
+    employees = Employee.objects.all()
+    whereabouts_choices = dict(Employee.WHEREABOUTS_CHOICES)
+    return render(request, 'pages/status.html', {
+        'employees': employees,
+        'whereabouts_choices': whereabouts_choices
+    })
+
+@csrf_exempt
+def update_whereabouts(request):
+    if request.method == 'POST':
+        employee_id = request.POST.get('employee_id')
+        new_whereabouts = request.POST.get('whereabouts')
+        
+        try:
+            employee = Employee.objects.get(id=employee_id)
+            employee.whereabouts = new_whereabouts
+            employee.save()
+            return JsonResponse({'status': 'success'})
+        except Employee.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Employee not found'}, status=404)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)

@@ -1,0 +1,129 @@
+{% extends 'pages/index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="status-container">
+    <h2 style="justify-content: center; text-align: center">Instructor Whereabouts</h2>
+    <table class="status-table">
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                {% for code, label in whereabouts_choices.items %}
+                    <th>{{ label }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.idNum }}</td>
+                <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                {% for code, label in whereabouts_choices.items %}
+                    <td>
+                        <div class="status-cell {% if employee.whereabouts == code %}active{% endif %}"
+                             data-employee-id="{{ employee.id }}"
+                             data-whereabouts="{{ code }}">
+                            ⬤
+                        </div>
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+.status-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.status-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.status-table th,
+.status-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.status-table th {
+    background-color: #f5f5f5;
+}
+
+.status-cell {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.3s;
+}
+
+.status-cell:hover {
+    color: #666;
+}
+
+.status-cell.active {
+    color: #4CAF50;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cells = document.querySelectorAll('.status-cell');
+    
+    cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+            const employeeId = this.dataset.employeeId;
+            const whereabouts = this.dataset.whereabouts;
+            
+            // Remove active class from all cells in the same row
+            const row = this.closest('tr');
+            row.querySelectorAll('.status-cell').forEach(cell => {
+                cell.classList.remove('active');
+            });
+            
+            // Add active class to clicked cell
+            this.classList.add('active');
+            
+            // Send update to server
+            fetch('{% url "update_whereabouts" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: `employee_id=${employeeId}&whereabouts=${whereabouts}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'success') {
+                    console.error('Update failed:', data.message);
+                }
+            });
+        });
+    });
+    
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %} 
