@@ -24,12 +24,12 @@ def is_active(request):
     cache_key = 'fingerprint_active'
     
     if request.method == 'POST':
-        active_state = request.data.get('is_active', False)  # Make this toggleable
+        active_state = request.data.get('is_active', True)  
         cache.set(cache_key, active_state, timeout=None)  
         return Response({'status': 'success', 'is_active': active_state})
         
     if request.method == 'GET':
-        is_active = cache.get(cache_key, False)   # Make this toggleable
+        is_active = cache.get(cache_key, True)   
         return Response({'is_active': is_active})
 
 
@@ -39,12 +39,12 @@ def mode(request):
     cache_key = 'fingerprint_mode'
     
     if request.method == 'POST':
-        mode_state = request.data.get('mode', 'verify')   # Make this toggleable
+        mode_state = request.data.get('mode', 'verify')   
         cache.set(cache_key, mode_state, timeout=None)  
         return Response({'status': 'success', 'mode': mode_state})
         
     if request.method == 'GET':
-        current_mode = cache.get(cache_key, 'verify')  # Make this toggleable
+        current_mode = cache.get(cache_key, 'verify')  
         return Response({'mode': current_mode})
 
 
