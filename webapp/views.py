@@ -105,6 +105,9 @@ def UEmployeeSched(request):
     employee = get_object_or_404(Employee, id=employee_id)
     user_profile = UserProfile.objects.filter(user=request.user).first()
 
+    # Fetch the schedule data for the logged-in employee
+    Sc = Ins_Schedule.objects.filter(employee=employee)
+
     posts = Post.objects.all().order_by('-created_at')
 
     return render(
@@ -115,7 +118,8 @@ def UEmployeeSched(request):
             'user': request.user,      
             'posts': posts,
             'first_name': employee.first_name,  
-            'user_profile': user_profile, 
+            'user_profile': user_profile,
+            'Sc': Sc,  # Pass the schedule data to the template
         }
     )
 
