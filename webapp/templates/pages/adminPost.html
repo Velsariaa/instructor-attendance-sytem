@@ -25,8 +25,8 @@
 <div class="box">
     <div class="pt profile-section">
         <div class="profile-container">
-            {% if user.userprofile.profile_picture %}
-                <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" width="100" height="100">
+            {% if first_name.userprofile.profile_picture %}
+                <img src="{{ first_name.userprofile.profile_picture.url }}" alt="Profile Picture" width="100" height="100">
             {% else %}
                 <img src="{% static 'image/usericon.png' %}" alt="Default Profile Picture" width="100" height="100">
             {% endif %}
@@ -52,25 +52,27 @@
 
     <ul>
         {% if posts %}
-            {% for post in posts %}
-            <div class="cons">
-                <div class="post-content">
-                    <strong>{{ post.author }}</strong> <br>
-                    <span>{{ post.created_at }}</span><br>
-                    <div class="post-body">
-                        <p>{{ post.body }}</p>
-                    </div>
-                    {% if post.image %}
-                        <div class="post-container">
-                            <a href="{{ post.image.url }}" target="_blank">
-                                <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
-                            </a>
-                        </div>
-                    {% endif %}
-                    <br>
-                </div>
+            <!-- adminPost.html -->
+{% for post in posts %}
+<div class="cons">
+    <div class="post-content">
+        <strong>{{ post.author.first_name }} {{ post.author.last_name }}</strong> <br>
+        <span>{{ post.created_at }}</span><br>
+        <div class="post-body">
+            <p>{{ post.body }}</p>
+        </div>
+        {% if post.image %}
+            <div class="post-container">
+                <a href="{{ post.image.url }}" target="_blank">
+                    <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                </a>
             </div>
-            {% endfor %}
+        {% endif %}
+        <br>
+    </div>
+</div>
+{% endfor %}
+
         {% else %}
             <div class="no-posts-message">
                 <p>No posts available. Be the first to share something!</p>

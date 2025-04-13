@@ -39,7 +39,7 @@ def user_data(request):
     if not employee_id:
         return redirect('user_login')
 
-    employee = get_object_or_404(Employee, id=employee_id)
+    employee = get_object_or_404(Employee, id=employee_id)  # ✅ Fetch logged-in employee
     user_profile = UserProfile.objects.filter(user=request.user).first()
     user_data = UserData.objects.filter(user=request.user)
     posts = Post.objects.select_related('author').all().order_by('-created_at')
@@ -48,7 +48,7 @@ def user_data(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            post.author = employee  # ✅ Assign Employee instance instead of User
             post.save()
             return redirect('user_data')
     else:
@@ -59,8 +59,10 @@ def user_data(request):
         'user_data': user_data,
         'posts': posts,
         'user_profile': user_profile,
-        'first_name': employee.first_name,  # Pass the first name
+        'first_name': employee.first_name,  # ✅ Pass first_name to the template
     })
+
+
 
 @csrf_exempt
 @login_required
@@ -515,26 +517,27 @@ def Details(request,pk):
 @csrf_exempt
 @login_required
 def Apost(request):
-    user_profile = UserProfile.objects.filter(user=request.user).first()
-    user_data = UserData.objects.filter(user=request.user)  
-    posts = Post.objects.select_related('author').all().order_by('-created_at')
-    
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user
+            try:
+                employee = Employee.objects.get(user=request.user)
+                post.author = employee  
+            except Employee.DoesNotExist:
+                post.author = None 
             post.save()
             return redirect('Apost')
     else:
         form = PostForm()
 
+    posts = Post.objects.all().order_by('-created_at')
+
     return render(request, 'pages/adminPost.html', {
         'form': form,
-        'user_data': user_data,
         'posts': posts,
-        'user_profile': user_profile
     })
+
 
 def adminDetails(request,pk):
     post = Post.objects.get(pk=pk)

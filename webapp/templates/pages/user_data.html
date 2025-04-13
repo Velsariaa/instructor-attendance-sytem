@@ -70,7 +70,7 @@
             {% for post in posts %}
             <div class="cons">
                 <div class="post-content">
-                    <strong>{{ post.author }}</strong> <br>
+                    <strong>{{ post.author.first_name }}</strong> <br> 
                     <span>{{ post.created_at }}</span><br>
                     <div class="post-body">
                         <p>{{ post.body }}</p>

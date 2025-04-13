@@ -1,13 +1,12 @@
 from django.contrib import admin # type: ignore
 from .models import Attendance, Employee,OrgChartList,TimeRecord,Post,DailyTimeRecords,Schedule,SuperUser,History,Comlab,Availability,UserData,UserProfile,Equipment,PositionDCS
 from .models import Instructor, Ins_Schedule
-
+from .models import Post, Employee
 
 admin.site.register(Attendance)
 admin.site.register(Employee)
 admin.site.register(OrgChartList)
 admin.site.register(TimeRecord)
-admin.site.register(Post)
 admin.site.register(DailyTimeRecords)
 admin.site.register(Schedule)
 admin.site.register(SuperUser)
@@ -20,3 +19,14 @@ admin.site.register(Equipment)
 admin.site.register(PositionDCS)
 admin.site.register(Instructor)
 admin.site.register(Ins_Schedule)
+
+class PostAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if not change:  
+            try:
+                obj.author = Employee.objects.get(user=request.user)
+            except Employee.DoesNotExist:
+                obj.author = None  
+        super().save_model(request, obj, form, change)
+
+admin.site.register(Post, PostAdmin)

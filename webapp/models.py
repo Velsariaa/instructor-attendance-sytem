@@ -140,7 +140,7 @@ class Employee(models.Model):
         ('MEETING', 'MEETING'),
     )
     
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     idNum = models.CharField(max_length=20, unique=True, default='')
     first_name = models.CharField(max_length=100, default='')
     last_name = models.CharField(max_length=100, default='')
@@ -157,7 +157,6 @@ class Employee(models.Model):
     backup_fingerprint_id = models.CharField(max_length=20, null=True, blank=True)
     password = models.CharField(max_length=30, default='')
     
-
     def __str__(self):
         return self.idNum
      
@@ -193,14 +192,15 @@ class PositionDCS(models.Model):
         return self.positions
 
 class Post(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField(blank=True)  # Allow the body field to be empty
-    created_at = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    author = models.ForeignKey(Employee, on_delete=models.CASCADE) 
+    title = models.CharField(max_length=255, null=True, blank=True)
+    body = models.TextField()
+    image = models.ImageField(upload_to='posts/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} | {self.author}"
+        return f"{self.author.first_name} - {self.body[:30]}"  
+
 
 
 class SuperUser(models.Model):
